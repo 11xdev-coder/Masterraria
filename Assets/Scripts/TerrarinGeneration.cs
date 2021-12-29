@@ -1,12 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using UnityEngine;
 
 public class TerrarinGeneration : MonoBehaviour
 {
+    public PlayerController player;
+    public CamController camera;
+
     [Header("Tile Atlas")]
     public TileAtlas tileAtlas;
-    public float seed;
+    public float seed; 
 
     public BiomeClass[] biomes;
 
@@ -53,7 +57,7 @@ public class TerrarinGeneration : MonoBehaviour
     private GameObject[] worldChunks;
     private List<Vector2> worldTiles = new List<Vector2>();
     private BiomeClass curBiome;
-    //private Color[] biomeCols;
+    private Color[] biomeCols;
 
 
     // CreateChunks() - создает чанки
@@ -77,27 +81,33 @@ public class TerrarinGeneration : MonoBehaviour
         DrawCavesAndOres();
     }
 
-    private void Start()
+    public void Start()
     {
         // идем через все руды
-        for(int i = 0; i < ores.Length; i++)
+        for (int i = 0; i < ores.Length; i++)
         {
             // инициализируем текстуры руд
             ores[i].spreadTexture = new Texture2D(worldSize, worldSize);
         }
 
-        //biomeCols = new Color[biomes.Length];
-        //for(int i = 0; i < biomes.Length; i++)
-        //{
-        //    biomeCols[i] = biomes[i].biomeColor;
-        //}
+        biomeCols = new Color[biomes.Length];
+        for (int i = 0; i < biomes.Length; i++)
+        {
+            biomeCols[i] = biomes[i].biomeColor;
+        }
 
         seed = Random.Range(-100, 1000000);
 
         //DrawTextures();
+        DrawBiomeMap();
         DrawCavesAndOres();
+
         CreateChunks();
         GenerateTerrain();
+
+        camera.Spawn(new Vector3(player.spawnPos.x, player.spawnPos.y, camera.transform.position.z));
+        camera.worldSize = worldSize;
+        player.Spawn();
     }
 
     public void CreateChunks()
@@ -162,7 +172,7 @@ public class TerrarinGeneration : MonoBehaviour
                         ores[i].spreadTexture.Apply();
                     }
                 }
-    }
+            }       
         }
         // применяем изменения
         caveNoiseTexture.Apply();
@@ -251,26 +261,26 @@ public class TerrarinGeneration : MonoBehaviour
     public BiomeClass GetCurrentBiome(int x, int y)
     {
         // идем через все биомы
-        for (int i = 0; i < biomes.Length; i++)
-        {
-            // проверяем, если цвет биома равен цвету этой же позиции на карте
-            //Debug.Log("Biome Color " + biomes[i].biomeColor);
-            //Debug.Log("Biome Map " + biomeMap.GetPixel(x, y));
-            if (biomes[i].biomeColor == biomeMap.GetPixel(x, y))
-            {
-                // возвращаем класс биом
-                return biomes[i];
-            }
-        }
-        // если нет то возвращяем текущий биом
-        return curBiome;
-
-        //if (System.Array.IndexOf(biomeCols, biomeMap.GetPixel(x, y)) > 0)
+        //for (int i = 0; i < biomes.Length; i++)
         //{
-        //    return biomes[System.Array.IndexOf(biomeCols, biomeMap.GetPixel(x, y))];
+        //    // проверяем, если цвет биома равен цвету этой же позиции на карте
+        //    //Debug.Log("Biome Color " + biomes[i].biomeColor);
+        //    //Debug.Log("Biome Map " + biomeMap.GetPixel(x, y));
+        //    if (biomes[i].biomeColor == biomeMap.GetPixel(x, y))
+        //    {
+        //        // возвращаем класс биом
+        //        return biomes[i];
+        //    }
         //}
-
+        //// если нет то возвращяем текущий биом
         //return curBiome;
+
+        if (System.Array.IndexOf(biomeCols, biomeMap.GetPixel(x, y)) >= 0)
+        {
+            return biomes[System.Array.IndexOf(biomeCols, biomeMap.GetPixel(x, y))];
+        }
+
+        return curBiome;
     }
 
     public void GenerateTerrain()
@@ -284,6 +294,12 @@ public class TerrarinGeneration : MonoBehaviour
             curBiome = GetCurrentBiome(x, 0);
             // узнаем высоту террейна
             float height = Mathf.PerlinNoise((x + seed) * terrainFreq, seed * terrainFreq) * curBiome.heightMultiplier + heightAddition;
+
+            if (x == worldSize / 2)
+            {
+                player.spawnPos = new Vector2(x, height + 1);
+            }
+
             for (int y = 0; y < height; y++)
             {
                 // узнаем текущий биом
@@ -346,13 +362,13 @@ public class TerrarinGeneration : MonoBehaviour
                     if (caveNoiseTexture.GetPixel(x, y).r > 0.5f)
                     {
                         // ставим нужный нам спрайт
-                        PlaceTile(tileSprites, x, y);
+                        PlaceTile(tileSprites, x, y, false);
                     }
                 }
                 else
                 {
                     // иначе просто ставим нужный нам спрайт
-                    PlaceTile(tileSprites, x, y);
+                    PlaceTile(tileSprites, x, y, false);
                 }
                 // если мы выше террейна
                 if (y >= height - 1)
@@ -391,7 +407,7 @@ public class TerrarinGeneration : MonoBehaviour
                                 // и есть спрайт для травы
                                 if (curBiome.tileAtlas.tallGrass != null)
                                     // генерируем траву
-                                    PlaceTile(curBiome.tileAtlas.tallGrass.tileSprites, x, y + 1);
+                                    PlaceTile(curBiome.tileAtlas.tallGrass.tileSprites, x, y + 1, true);
                             }
                         }
                     }
@@ -400,21 +416,36 @@ public class TerrarinGeneration : MonoBehaviour
         }
     }
 
+    public void DrawBiomeMap()
+    {
+        float b;
+        Color col;
+        biomeMap = new Texture2D(worldSize, worldSize);
+        for (int x = 0; x < biomeMap.width; x++)
+        {
+            for (int y = 0; y < biomeMap.height; y++)
+            {
+                // создаем белый шум
+                b = Mathf.PerlinNoise((x + seed) * biomeFreq, (y + seed) * biomeFreq);
+                col = biomeGradient.Evaluate(b);
+                biomeMap.SetPixel(x, y, col);
+                
+            }
+        }
+
+        biomeMap.Apply();
+    }
+
     public void GenerateNoiseTextures(float freq, float limit, Texture2D noiseTexture)
     {
         float v;
-        float b;
-        Color col;
         for(int x = 0; x < noiseTexture.width; x++)
         {
             for (int y = 0; y < noiseTexture.height; y++)
             {
                 // создаем белый шум
                 v = Mathf.PerlinNoise((x + seed) * freq, (y + seed) * freq);
-                b = Mathf.PerlinNoise((x + seed) * biomeFreq, (y + seed) * biomeFreq);
-                col = biomeGradient.Evaluate(b);
 
-                biomeMap.SetPixel(x, y, col);
                 if (v > limit)
                 {
                     // красим пиксель в белый
@@ -429,7 +460,6 @@ public class TerrarinGeneration : MonoBehaviour
         }
         // применяем изменения
         noiseTexture.Apply();
-        biomeMap.Apply();
     }
 
     void GenerateCactus(TileAtlas atlas, int treeHeight, int x, int y)
@@ -438,7 +468,7 @@ public class TerrarinGeneration : MonoBehaviour
         for (int h = 0; h <= treeHeight; h++)
         {
             // ставим блок дерева
-            PlaceTile(atlas.log.tileSprites, x, y + h);
+            PlaceTile(atlas.log.tileSprites, x, y + h, true);
         }
     }
 
@@ -448,26 +478,26 @@ public class TerrarinGeneration : MonoBehaviour
         for(int h = 0; h <= treeHeight; h++)
         {
             // ставим блок дерева
-            PlaceTile(tileAtlas.log.tileSprites, x, y + h);
+            PlaceTile(tileAtlas.log.tileSprites, x, y + h, true);
         }
 
         // generate leaves
         // ставим блоки листьев
-        PlaceTile(tileAtlas.leaf.tileSprites, x, y + treeHeight);
-        PlaceTile(tileAtlas.leaf.tileSprites, x, y + treeHeight + 1);
-        PlaceTile(tileAtlas.leaf.tileSprites, x, y + treeHeight + 2);
+        PlaceTile(tileAtlas.leaf.tileSprites, x, y + treeHeight, true);
+        PlaceTile(tileAtlas.leaf.tileSprites, x, y + treeHeight + 1, true);
+        PlaceTile(tileAtlas.leaf.tileSprites, x, y + treeHeight + 2, true);
 
-        PlaceTile(tileAtlas.leaf.tileSprites, x - 1, y + treeHeight);
-        PlaceTile(tileAtlas.leaf.tileSprites, x - 1, y + treeHeight + 1);
+        PlaceTile(tileAtlas.leaf.tileSprites, x - 1, y + treeHeight, true);
+        PlaceTile(tileAtlas.leaf.tileSprites, x - 1, y + treeHeight + 1, true);
 
-        PlaceTile(tileAtlas.leaf.tileSprites, x + 1, y + treeHeight);
-        PlaceTile(tileAtlas.leaf.tileSprites, x + 1, y + treeHeight + 1);
+        PlaceTile(tileAtlas.leaf.tileSprites, x + 1, y + treeHeight, true);
+        PlaceTile(tileAtlas.leaf.tileSprites, x + 1, y + treeHeight + 1, true);
     }
 
-    public void PlaceTile(Sprite[] tileSprites, int x, int y)
+    public void PlaceTile(Sprite[] tileSprites, int x, int y, bool backgroundElement)
     {
         // проверка нету ли этого блока уже
-        if (!worldTiles.Contains(new Vector2Int(x, y)))
+        if (!worldTiles.Contains(new Vector2Int(x, y)) && x >= 0 && x <= worldSize && y >= 0 && y <= worldSize)
         {
             // инициализируем блок
             GameObject newTile = new GameObject();
@@ -479,10 +509,19 @@ public class TerrarinGeneration : MonoBehaviour
             newTile.transform.parent = worldChunks[chunkCoord].transform;
             // добавляем компонент
             newTile.AddComponent<SpriteRenderer>();
+            if (!backgroundElement)
+            {
+                newTile.AddComponent<BoxCollider2D>();
+                newTile.GetComponent<BoxCollider2D>().size = Vector2.one;
+                newTile.tag = "Ground";
+            }
+
             // получаем спрайт индекс
             int spriteIndex = Random.Range(0, tileSprites.Length);
             // меняем спрайт
             newTile.GetComponent<SpriteRenderer>().sprite = tileSprites[spriteIndex];
+            newTile.GetComponent<SpriteRenderer>().sortingOrder = -5;
+
             // меняем имя
             newTile.name = tileSprites[0].name;
             // задаем нужную позицию

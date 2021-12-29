@@ -11,6 +11,8 @@ public class BiomeClass
 
     [Header("Noise Settings")]
     public Texture2D caveNoiseTexture;
+    public float caveFreq = 0.5f;
+    public float terrainFreq = 0.5f;
 
     [Header("Generation Settings")]
     public int dirtLayerHeight = 5;
