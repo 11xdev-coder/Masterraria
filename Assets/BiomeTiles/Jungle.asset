@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3a707c6483685b4886cc4b6ab538905, type: 3}
+  m_Name: Jungle
+  m_EditorClassIdentifier: 
+  grass: {fileID: 11400000, guid: d03b7fb4175c1144c811cc1c959a4344, type: 2}
+  dirt: {fileID: 11400000, guid: 0e6b5b9b18485ee499bcdb03608660b5, type: 2}
+  stone: {fileID: 11400000, guid: d8d43b4ba68be6c4288a375dca4c3b98, type: 2}
+  log: {fileID: 0}
+  leaf: {fileID: 0}
+  snow: {fileID: 0}
+  sand: {fileID: 0}
+  mud: {fileID: 0}
+  copper: {fileID: 11400000, guid: 17cc6df01b7c86544baf4d548c0112d0, type: 2}
+  coal: {fileID: 11400000, guid: 442ce9aa35ef3bf428e1235284f7e8a5, type: 2}
+  iron: {fileID: 0}
+  gold: {fileID: 0}
+  tallGrass: {fileID: 11400000, guid: 4e34ec8e72cc38e4cbc46f5c0b34efb7, type: 2}

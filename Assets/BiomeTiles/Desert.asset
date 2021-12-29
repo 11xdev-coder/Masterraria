@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3a707c6483685b4886cc4b6ab538905, type: 3}
+  m_Name: Desert
+  m_EditorClassIdentifier: 
+  grass: {fileID: 11400000, guid: 7f35efc0dee0e384dbdfeb0ee91105f7, type: 2}
+  dirt: {fileID: 11400000, guid: 7f35efc0dee0e384dbdfeb0ee91105f7, type: 2}
+  stone: {fileID: 11400000, guid: 049d15335c7d3b641afe0d4e5b301751, type: 2}
+  log: {fileID: 11400000, guid: a8c5b5c2846406a429e8a70d3d7ddab1, type: 2}
+  leaf: {fileID: 0}
+  snow: {fileID: 0}
+  sand: {fileID: 0}
+  mud: {fileID: 0}
+  cactus: {fileID: 0}
+  copper: {fileID: 11400000, guid: b70319c03f3bab74cbae9dbf8c600419, type: 2}
+  coal: {fileID: 11400000, guid: b70319c03f3bab74cbae9dbf8c600419, type: 2}
+  iron: {fileID: 11400000, guid: b70319c03f3bab74cbae9dbf8c600419, type: 2}
+  gold: {fileID: 11400000, guid: b70319c03f3bab74cbae9dbf8c600419, type: 2}
+  tallGrass: {fileID: 11400000, guid: 096fed3d9cba0a4499d7de24919d3c33, type: 2}
