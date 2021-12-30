@@ -14,6 +14,6 @@ public class WorldManager : MonoBehaviour
     public void CreateWorld()
     {
         SceneManager.LoadScene("World1");
-        //GameObject.Find("TerrainGenerator1").GetComponent<TerrarinGeneration>().Generate();
+        //GameObject.Find("TerrainGenerator1").GetComponent<TerrainGeneration>().Generate();
     }
 }

@@ -13,8 +13,13 @@ public class PlayerController : MonoBehaviour
     private Animator anim;
     
     private float horizontal;
+    public bool hit;
+    public int reachDistance;
 
+    [HideInInspector]
     public Vector2 spawnPos;
+    public Vector2Int mousePos;
+    public TerrainGeneration terrainGenerator;
 
     public void Spawn()
     {
@@ -42,11 +47,20 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        float reach = Vector2.Distance(mousePos, this.transform.position);
+        reach = Mathf.RoundToInt(reach);
+
         horizontal = Input.GetAxis("Horizontal");
         float jump = Input.GetAxisRaw("Jump");
         float vertical = Input.GetAxisRaw("Vertical");
+        hit = Input.GetMouseButton(0);
 
         Vector2 movement = new Vector2(horizontal * moveSpeed, rb.velocity.y);
+
+        if (hit && reach <= reachDistance)
+        {
+            terrainGenerator.RemoveTile(mousePos.x, mousePos.y);
+        }
 
         if (horizontal > 0)
         {
@@ -68,6 +82,10 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        mousePos.x = Mathf.RoundToInt(Camera.main.ScreenToWorldPoint(Input.mousePosition).x - 0.5f);
+        mousePos.y = Mathf.RoundToInt(Camera.main.ScreenToWorldPoint(Input.mousePosition).y - 0.5f);
+
         anim.SetFloat("horizontal", horizontal);
+        anim.SetBool("hit", hit);
     }
 }
