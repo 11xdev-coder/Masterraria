@@ -15,3 +15,4 @@ MonoBehaviour:
   tileName: DesertFossil
   tileSprites:
   - {fileID: 21300000, guid: 6206cabe003e7e643af82263aed44d48, type: 3}
+  inBackGround: 0

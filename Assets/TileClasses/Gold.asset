@@ -16,3 +16,4 @@ MonoBehaviour:
   tileSprites:
   - {fileID: 21300000, guid: 66502a5367f868b41becd6fbf1db836d, type: 3}
   - {fileID: 21300000, guid: d0cc8aafd4e6cf2438ba292a1523fe30, type: 3}
+  inBackGround: 0

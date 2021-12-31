@@ -15,3 +15,4 @@ MonoBehaviour:
   tileName: Mud Grass
   tileSprites:
   - {fileID: 21300000, guid: 2e290dfc327855541ba7a4ac633e1c44, type: 3}
+  inBackGround: 0

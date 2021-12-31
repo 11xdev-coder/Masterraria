@@ -7,6 +7,7 @@ public class TerrainGeneration : MonoBehaviour
 {
     public PlayerController player;
     public CamController camera;
+    public GameObject tileDrop;
 
     [Header("Tile Atlas")]
     public TileAtlas tileAtlas;
@@ -58,6 +59,7 @@ public class TerrainGeneration : MonoBehaviour
 
     private List<Vector2> worldTiles = new List<Vector2>();
     private List<GameObject> worldTileObjects = new List<GameObject>();
+    private List<TileClass> worldTileClasses = new List<TileClass>();
 
     private BiomeClass curBiome;
     private Color[] biomeCols;
@@ -294,7 +296,7 @@ public class TerrainGeneration : MonoBehaviour
     public void GenerateTerrain()
     {
         // создаем список со спрайтами
-        Sprite[] tileSprites;
+        TileClass tileSprites;
 
         for (int x = 0; x < worldSize; x++)
         {
@@ -320,48 +322,48 @@ public class TerrainGeneration : MonoBehaviour
                 if (y < height - curBiome.dirtLayerHeight)
                 {
                     // изменяем спрайт на камень
-                    tileSprites = curBiome.tileAtlas.stone.tileSprites;
+                    tileSprites = curBiome.tileAtlas.stone;
                     // copper
                     // если цвет спреда руды(меди) больше 0.5 и не превышает высоту спавна
                     if (ores[0].spreadTexture.GetPixel(x, y).r > 0.5f && height - y > ores[0].maxSpawnHeight)
                     {
                         // изменяем спрайт на медь
-                        tileSprites = curBiome.tileAtlas.copper.tileSprites;
+                        tileSprites = curBiome.tileAtlas.copper;
                     }
                     // coal
                     // если цвет спреда руды(угля) больше 0.5 и не превышает высоту спавна
                     else if (ores[1].spreadTexture.GetPixel(x, y).r > 0.5f && height - y > ores[1].maxSpawnHeight)
                     {
                         // изменяем спрайт на уголь
-                        tileSprites = curBiome.tileAtlas.coal.tileSprites;
+                        tileSprites = curBiome.tileAtlas.coal;
                     }
                     // iron
                     // если цвет спреда руды(железо) больше 0.5 и не превышает высоту спавна
                     else if (ores[2].spreadTexture.GetPixel(x, y).r > 0.5f && height - y > ores[2].maxSpawnHeight)
                     {
                         // изменяем спрайт на железо
-                        tileSprites = tileAtlas.iron.tileSprites;
+                        tileSprites = tileAtlas.iron;
                     }
                     // gold
                     // если цвет спреда руды(золото) больше 0.5 и не превышает высоту спавна
                     else if (ores[3].spreadTexture.GetPixel(x, y).r > 0.5f && height - y > ores[3].maxSpawnHeight)
                     {
                         // изменяем спрайт на золото
-                        tileSprites = tileAtlas.gold.tileSprites;
+                        tileSprites = tileAtlas.gold;
                     }
                 }
                 // иначе если y на уровне земли
                 else if (y < height - 1)
                 {
                     // меняем спрайт на землю
-                    tileSprites = curBiome.tileAtlas.dirt.tileSprites;
+                    tileSprites = curBiome.tileAtlas.dirt;
                 }
                 // иначе
                 else
                 {
                     // top layer of terrains
                     // меняем спрайт на дерн
-                    tileSprites = curBiome.tileAtlas.grass.tileSprites;
+                    tileSprites = curBiome.tileAtlas.grass;
                 }
                 // надо ли генерировать пещеры?
                 if (generateCaves)
@@ -370,13 +372,13 @@ public class TerrainGeneration : MonoBehaviour
                     if (caveNoiseTexture.GetPixel(x, y).r > 0.5f)
                     {
                         // ставим нужный нам спрайт
-                        PlaceTile(tileSprites, x, y, false);
+                        PlaceTile(tileSprites, x, y);
                     }
                 }
                 else
                 {
                     // иначе просто ставим нужный нам спрайт
-                    PlaceTile(tileSprites, x, y, false);
+                    PlaceTile(tileSprites, x, y);
                 }
                 // если мы выше террейна
                 if (y >= height - 1)
@@ -415,7 +417,7 @@ public class TerrainGeneration : MonoBehaviour
                                 // и есть спрайт для травы
                                 if (curBiome.tileAtlas.tallGrass != null)
                                     // генерируем траву
-                                    PlaceTile(curBiome.tileAtlas.tallGrass.tileSprites, x, y + 1, true);
+                                    PlaceTile(curBiome.tileAtlas.tallGrass, x, y + 1);
                             }
                         }
                     }
@@ -476,7 +478,7 @@ public class TerrainGeneration : MonoBehaviour
         for (int h = 0; h <= treeHeight; h++)
         {
             // ставим блок дерева
-            PlaceTile(atlas.log.tileSprites, x, y + h, true);
+            PlaceTile(atlas.log, x, y + h);
         }
     }
 
@@ -486,20 +488,20 @@ public class TerrainGeneration : MonoBehaviour
         for(int h = 0; h <= treeHeight; h++)
         {
             // ставим блок дерева
-            PlaceTile(tileAtlas.log.tileSprites, x, y + h, true);
+            PlaceTile(tileAtlas.log, x, y + h);
         }
 
         // generate leaves
         // ставим блоки листьев
-        PlaceTile(tileAtlas.leaf.tileSprites, x, y + treeHeight, true);
-        PlaceTile(tileAtlas.leaf.tileSprites, x, y + treeHeight + 1, true);
-        PlaceTile(tileAtlas.leaf.tileSprites, x, y + treeHeight + 2, true);
+        PlaceTile(tileAtlas.leaf, x, y + treeHeight);
+        PlaceTile(tileAtlas.leaf, x, y + treeHeight + 1);
+        PlaceTile(tileAtlas.leaf, x, y + treeHeight + 2);
 
-        PlaceTile(tileAtlas.leaf.tileSprites, x - 1, y + treeHeight, true);
-        PlaceTile(tileAtlas.leaf.tileSprites, x - 1, y + treeHeight + 1, true);
+        PlaceTile(tileAtlas.leaf, x - 1, y + treeHeight);
+        PlaceTile(tileAtlas.leaf, x - 1, y + treeHeight + 1);
 
-        PlaceTile(tileAtlas.leaf.tileSprites, x + 1, y + treeHeight, true);
-        PlaceTile(tileAtlas.leaf.tileSprites, x + 1, y + treeHeight + 1, true);
+        PlaceTile(tileAtlas.leaf, x + 1, y + treeHeight);
+        PlaceTile(tileAtlas.leaf, x + 1, y + treeHeight + 1);
     }
 
     public void RemoveTile(int x, int y)
@@ -507,6 +509,17 @@ public class TerrainGeneration : MonoBehaviour
         if (worldTiles.Contains(new Vector2Int(x, y)) && x >= 0 && x <= worldSize && y >= 0 && y <= worldSize)
         {
             Destroy(worldTileObjects[worldTiles.IndexOf(new Vector2(x, y))]);
+
+            if (worldTileClasses[worldTiles.IndexOf(new Vector2(x, y))].tileDrop)
+            {
+                GameObject newTileDrop = Instantiate(tileDrop, new Vector2(x, y + 0.5f), Quaternion.identity);
+                newTileDrop.GetComponent<SpriteRenderer>().sprite =
+                    worldTileClasses[worldTiles.IndexOf(new Vector2(x, y))].tileSprites[0];
+            }
+
+            worldTileObjects.RemoveAt(worldTiles.IndexOf(new Vector2(x, y)));
+            worldTileClasses.RemoveAt(worldTiles.IndexOf(new Vector2(x, y)));
+            worldTiles.RemoveAt(worldTiles.IndexOf(new Vector2(x, y)));
         }
     }
 
@@ -526,10 +539,30 @@ public class TerrainGeneration : MonoBehaviour
         }
     }
 
-    public void PlaceTile(Sprite[] tileSprites, int x, int y, bool backgroundElement)
+    public void CheckTile(TileClass tile, int x, int y, bool backgroundElement)
     {
+        if (x >= 0 && x <= worldSize && y >= 0 && y <= worldSize)
+        {
+            if (!worldTiles.Contains(new Vector2Int(x, y)))
+            {
+                PlaceTile(tile, x, y);
+            }
+            else
+            {
+                if (worldTileClasses[worldTiles.IndexOf(new Vector2Int(x, y))].inBackGround)
+                {
+                    RemoveTile(x, y);
+                    PlaceTile(tile, x, y);
+                }
+            }
+        }
+    }
+
+    public void PlaceTile(TileClass tile, int x, int y)
+    {
+        bool backgroundElement = tile.inBackGround;
         // проверка нету ли этого блока уже
-        if (!worldTiles.Contains(new Vector2Int(x, y)) && x >= 0 && x <= worldSize && y >= 0 && y <= worldSize)
+        if (x >= 0 && x <= worldSize && y >= 0 && y <= worldSize)
         {
             // инициализируем блок
             GameObject newTile = new GameObject();
@@ -549,18 +582,25 @@ public class TerrainGeneration : MonoBehaviour
             }
 
             // получаем спрайт индекс
-            int spriteIndex = Random.Range(0, tileSprites.Length);
+            int spriteIndex = Random.Range(0, tile.tileSprites.Length);
             // меняем спрайт
-            newTile.GetComponent<SpriteRenderer>().sprite = tileSprites[spriteIndex];
-            newTile.GetComponent<SpriteRenderer>().sortingOrder = -5;
+            newTile.GetComponent<SpriteRenderer>().sprite = tile.tileSprites[spriteIndex];
+            if(tile.inBackGround)
+                newTile.GetComponent<SpriteRenderer>().sortingOrder = -10;
+            else
+            {
+                newTile.GetComponent<SpriteRenderer>().sortingOrder = -5;
+            }
 
             // меняем имя
-            newTile.name = tileSprites[0].name;
+            newTile.name = tile.tileSprites[0].name;
             // задаем нужную позицию
             newTile.transform.position = new Vector2(x + 0.5f, y + 0.5f);
             // добавляем в список
             worldTiles.Add(newTile.transform.position - (Vector3.one * 0.5f));
             worldTileObjects.Add(newTile);
+            worldTileClasses.Add(tile);
+            
         }
     }
 }

@@ -15,3 +15,4 @@ MonoBehaviour:
   tileName: SandStone
   tileSprites:
   - {fileID: 21300000, guid: 45c796084327cc54d8442678f4e27606, type: 3}
+  inBackGround: 0

@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public TileClass selectedTile;
+
     public float moveSpeed;
     public float jumpForce;
     public bool onGround;
@@ -15,9 +17,11 @@ public class PlayerController : MonoBehaviour
     private float horizontal;
     public bool hit;
     public int reachDistance;
+    public bool place;
 
     [HideInInspector]
     public Vector2 spawnPos;
+
     public Vector2Int mousePos;
     public TerrainGeneration terrainGenerator;
 
@@ -47,19 +51,25 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        float reach = Vector2.Distance(mousePos, this.transform.position);
-        reach = Mathf.RoundToInt(reach);
-
         horizontal = Input.GetAxis("Horizontal");
         float jump = Input.GetAxisRaw("Jump");
         float vertical = Input.GetAxisRaw("Vertical");
         hit = Input.GetMouseButton(0);
+        place = Input.GetMouseButton(1);
 
         Vector2 movement = new Vector2(horizontal * moveSpeed, rb.velocity.y);
 
-        if (hit && reach <= reachDistance)
+        if (Vector2.Distance(transform.position, mousePos) <= reachDistance &&
+            Vector2.Distance(transform.position, mousePos) > 1f)
         {
-            terrainGenerator.RemoveTile(mousePos.x, mousePos.y);
+            if (hit)
+            {
+                terrainGenerator.RemoveTile(mousePos.x, mousePos.y);
+            }
+            else if (place)
+            {
+                terrainGenerator.CheckTile(selectedTile, mousePos.x, mousePos.y, false);
+            }
         }
 
         if (horizontal > 0)
@@ -86,6 +96,6 @@ public class PlayerController : MonoBehaviour
         mousePos.y = Mathf.RoundToInt(Camera.main.ScreenToWorldPoint(Input.mousePosition).y - 0.5f);
 
         anim.SetFloat("horizontal", horizontal);
-        anim.SetBool("hit", hit);
+        anim.SetBool("hit", hit || place);
     }
 }
