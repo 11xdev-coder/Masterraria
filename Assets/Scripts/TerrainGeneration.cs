@@ -372,18 +372,18 @@ public class TerrainGeneration : MonoBehaviour
                     if (caveNoiseTexture.GetPixel(x, y).r > 0.5f)
                     {
                         // ставим нужный нам спрайт
-                        PlaceTile(tileSprites, x, y);
+                        PlaceTile(tileSprites, x, y, true);
                     }
                     else
                     {
                         if(tileSprites.wallVariant != null)
-                            PlaceTile(tileSprites.wallVariant, x, y);
+                            PlaceTile(tileSprites.wallVariant, x, y, true);
                     }
                 }
                 else
                 {
                     // иначе просто ставим нужный нам спрайт
-                    PlaceTile(tileSprites, x, y);
+                    PlaceTile(tileSprites, x, y, true);
                 }
                 // если мы выше террейна
                 if (y >= height - 1)
@@ -422,7 +422,7 @@ public class TerrainGeneration : MonoBehaviour
                                 // и есть спрайт для травы
                                 if (curBiome.tileAtlas.tallGrass != null)
                                     // генерируем траву
-                                    PlaceTile(curBiome.tileAtlas.tallGrass, x, y + 1);
+                                    PlaceTile(curBiome.tileAtlas.tallGrass, x, y + 1, true);
                             }
                         }
                     }
@@ -483,7 +483,7 @@ public class TerrainGeneration : MonoBehaviour
         for (int h = 0; h <= treeHeight; h++)
         {
             // ставим блок дерева
-            PlaceTile(atlas.log, x, y + h);
+            PlaceTile(atlas.log, x, y + h, true);
         }
     }
 
@@ -493,34 +493,36 @@ public class TerrainGeneration : MonoBehaviour
         for(int h = 0; h <= treeHeight; h++)
         {
             // ставим блок дерева
-            PlaceTile(tileAtlas.log, x, y + h);
+            PlaceTile(tileAtlas.log, x, y + h, true);
         }
 
         // generate leaves
         // ставим блоки листьев
-        PlaceTile(tileAtlas.leaf, x, y + treeHeight);
-        PlaceTile(tileAtlas.leaf, x, y + treeHeight + 1);
-        PlaceTile(tileAtlas.leaf, x, y + treeHeight + 2);
+        PlaceTile(tileAtlas.leaf, x, y + treeHeight, true);
+        PlaceTile(tileAtlas.leaf, x, y + treeHeight + 1, true);
+        PlaceTile(tileAtlas.leaf, x, y + treeHeight + 2, true);
 
-        PlaceTile(tileAtlas.leaf, x - 1, y + treeHeight);
-        PlaceTile(tileAtlas.leaf, x - 1, y + treeHeight + 1);
+        PlaceTile(tileAtlas.leaf, x - 1, y + treeHeight, true);
+        PlaceTile(tileAtlas.leaf, x - 1, y + treeHeight + 1, true);
 
-        PlaceTile(tileAtlas.leaf, x + 1, y + treeHeight);
-        PlaceTile(tileAtlas.leaf, x + 1, y + treeHeight + 1);
+        PlaceTile(tileAtlas.leaf, x + 1, y + treeHeight, true);
+        PlaceTile(tileAtlas.leaf, x + 1, y + treeHeight + 1, true);
     }
 
     public void RemoveTile(int x, int y)
     {
+        TileClass tile = worldTileClasses[worldTiles.IndexOf(new Vector2(x, y))];
         if (worldTiles.Contains(new Vector2Int(x, y)) && x >= 0 && x <= worldSize && y >= 0 && y <= worldSize)
         {
-            if (worldTileClasses[worldTiles.IndexOf(new Vector2(x, y))].wallVariant)
+            if (tile.wallVariant != null)
             {
-               PlaceTile(worldTileClasses[worldTiles.IndexOf(new Vector2(x, y))].wallVariant, x ,y);
+                if(tile.naturallyPlaced)
+                    PlaceTile(tile.wallVariant, x ,y, true);
             }
 
             Destroy(worldTileObjects[worldTiles.IndexOf(new Vector2(x, y))]);
 
-            if (worldTileClasses[worldTiles.IndexOf(new Vector2(x, y))].tileDrop)
+            if (tile.tileDrop)
             {
                 GameObject newTileDrop = Instantiate(tileDrop, new Vector2(x, y + 0.5f), Quaternion.identity);
                 newTileDrop.GetComponent<SpriteRenderer>().sprite =
@@ -549,26 +551,26 @@ public class TerrainGeneration : MonoBehaviour
         }
     }
 
-    public void CheckTile(TileClass tile, int x, int y)
+    public void CheckTile(TileClass tile, int x, int y, bool isNaturallyPlaced)
     {
         if (x >= 0 && x <= worldSize && y >= 0 && y <= worldSize)
         {
             if (!worldTiles.Contains(new Vector2Int(x, y)))
             {
-                PlaceTile(tile, x, y);
+                PlaceTile(tile, x, y, isNaturallyPlaced);
             }
             else
             {
                 if (worldTileClasses[worldTiles.IndexOf(new Vector2Int(x, y))].inBackGround)
                 {
                     RemoveTile(x, y);
-                    PlaceTile(tile, x, y);
+                    PlaceTile(tile, x, y, isNaturallyPlaced);
                 }
             }
         }
     }
 
-    public void PlaceTile(TileClass tile, int x, int y)
+    public void PlaceTile(TileClass tile, int x, int y, bool isNaturallyPlaced)
     {
         bool backgroundElement = tile.inBackGround;
         // проверка нету ли этого блока уже
@@ -613,6 +615,8 @@ public class TerrainGeneration : MonoBehaviour
             newTile.name = tile.tileSprites[0].name;
             // задаем нужную позицию
             newTile.transform.position = new Vector2(x + 0.5f, y + 0.5f);
+
+            tile.naturallyPlaced = isNaturallyPlaced;
             // добавляем в список
             worldTiles.Add(newTile.transform.position - (Vector3.one * 0.5f));
             worldTileObjects.Add(newTile);

@@ -10,5 +10,6 @@ public class TileClass : ScriptableObject
     //public Sprite tileSprite;
     public Sprite[] tileSprites;
     public bool inBackGround = true;
+    public bool naturallyPlaced = true;
     public bool tileDrop = true;
 }
