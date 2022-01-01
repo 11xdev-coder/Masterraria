@@ -374,6 +374,11 @@ public class TerrainGeneration : MonoBehaviour
                         // ставим нужный нам спрайт
                         PlaceTile(tileSprites, x, y);
                     }
+                    else
+                    {
+                        if(tileSprites.wallVariant != null)
+                            PlaceTile(tileSprites.wallVariant, x, y);
+                    }
                 }
                 else
                 {
@@ -508,6 +513,11 @@ public class TerrainGeneration : MonoBehaviour
     {
         if (worldTiles.Contains(new Vector2Int(x, y)) && x >= 0 && x <= worldSize && y >= 0 && y <= worldSize)
         {
+            if (worldTileClasses[worldTiles.IndexOf(new Vector2(x, y))].wallVariant)
+            {
+               PlaceTile(worldTileClasses[worldTiles.IndexOf(new Vector2(x, y))].wallVariant, x ,y);
+            }
+
             Destroy(worldTileObjects[worldTiles.IndexOf(new Vector2(x, y))]);
 
             if (worldTileClasses[worldTiles.IndexOf(new Vector2(x, y))].tileDrop)
@@ -528,7 +538,7 @@ public class TerrainGeneration : MonoBehaviour
         for (int i = 0; i < worldChunks.Length; i++)
         {
             if (Vector2.Distance(new Vector2((i * chunkSize) + (chunkSize / 2), 0), new Vector2(player.transform.position.x, 0)) >
-                Camera.main.orthographicSize * 4f)
+                Camera.main.orthographicSize * 5f)
             {
                 worldChunks[i].SetActive(false);
             }
@@ -539,7 +549,7 @@ public class TerrainGeneration : MonoBehaviour
         }
     }
 
-    public void CheckTile(TileClass tile, int x, int y, bool backgroundElement)
+    public void CheckTile(TileClass tile, int x, int y)
     {
         if (x >= 0 && x <= worldSize && y >= 0 && y <= worldSize)
         {
@@ -585,11 +595,18 @@ public class TerrainGeneration : MonoBehaviour
             int spriteIndex = Random.Range(0, tile.tileSprites.Length);
             // меняем спрайт
             newTile.GetComponent<SpriteRenderer>().sprite = tile.tileSprites[spriteIndex];
-            if(tile.inBackGround)
+            if (tile.inBackGround)
+            {
                 newTile.GetComponent<SpriteRenderer>().sortingOrder = -10;
+            }
             else
             {
                 newTile.GetComponent<SpriteRenderer>().sortingOrder = -5;
+            }
+
+            if (tile.name.ToUpper().Contains("WALL"))
+            {
+                newTile.GetComponent<SpriteRenderer>().color = new Color(0.5f, 0.5f, 0.5f);
             }
 
             // меняем имя

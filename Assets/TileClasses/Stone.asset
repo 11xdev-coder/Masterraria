@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: Stone
   m_EditorClassIdentifier: 
   tileName: Stone
+  wallVariant: {fileID: 11400000, guid: 7b92ce008b922794184b431c4b654983, type: 2}
   tileSprites:
   - {fileID: 21300000, guid: 53888bc9e93905445b08ddd1a8bd8f60, type: 3}
   - {fileID: 21300000, guid: ae000846342da5f4ca08a45f0da49f6f, type: 3}
   inBackGround: 0
+  tileDrop: 1

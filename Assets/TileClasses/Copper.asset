@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: Copper
   m_EditorClassIdentifier: 
   tileName: Copper
+  wallVariant: {fileID: 11400000, guid: 7b92ce008b922794184b431c4b654983, type: 2}
   tileSprites:
   - {fileID: 21300000, guid: 0bb4640cf1210ce4da90160be7090156, type: 3}
   - {fileID: 21300000, guid: 2aad884571d8ebf419350b007ba82535, type: 3}
   inBackGround: 0
+  tileDrop: 1

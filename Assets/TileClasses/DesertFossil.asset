@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: DesertFossil
   m_EditorClassIdentifier: 
   tileName: DesertFossil
+  wallVariant: {fileID: 11400000, guid: f4411c34ee5b7a6428e72b3218f84abf, type: 2}
   tileSprites:
   - {fileID: 21300000, guid: 6206cabe003e7e643af82263aed44d48, type: 3}
   inBackGround: 0
+  tileDrop: 1

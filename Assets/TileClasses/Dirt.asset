@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: Dirt
   m_EditorClassIdentifier: 
   tileName: Dirt
+  wallVariant: {fileID: 11400000, guid: 5a9d52cdc7844754d877d15ef1df68bf, type: 2}
   tileSprites:
   - {fileID: 21300000, guid: c6a70303a254396459eef3f3e2e3aa44, type: 3}
   - {fileID: 21300000, guid: 0d57fa4b074cdde48a2618527aea8e4c, type: 3}
   inBackGround: 0
+  tileDrop: 1
