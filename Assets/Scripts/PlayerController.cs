@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public Inventory inventory;
+    public bool inventoryShowing = false;
+
     public TileClass selectedTile;
 
     public float moveSpeed;
@@ -30,6 +33,7 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        inventory = GetComponent<Inventory>();
     }
 
     public void Spawn()
@@ -84,6 +88,11 @@ public class PlayerController : MonoBehaviour
         hit = Input.GetMouseButtonDown(0);
         place = Input.GetMouseButtonDown(1);
 
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            inventoryShowing = !inventoryShowing;
+        }
+
         if (Vector2.Distance(transform.position, mousePos) <= reachDistance /*&&
             Vector2.Distance(transform.position, mousePos) > 1f*/)
         {
@@ -99,6 +108,8 @@ public class PlayerController : MonoBehaviour
 
         mousePos.x = Mathf.RoundToInt(Camera.main.ScreenToWorldPoint(Input.mousePosition).x - 0.5f);
         mousePos.y = Mathf.RoundToInt(Camera.main.ScreenToWorldPoint(Input.mousePosition).y - 0.5f);
+
+        inventory.inventoryUI.SetActive(inventoryShowing);
 
         anim.SetFloat("horizontal", horizontal);
         anim.SetBool("hit", hit || place);
