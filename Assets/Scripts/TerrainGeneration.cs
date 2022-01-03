@@ -10,8 +10,9 @@ public class TerrainGeneration : MonoBehaviour
     [Header("Lighting")]
     public Texture2D worldTilesMap;
     public Material lightShader;
-    public float lightThreshold;
-    public float lightRadius = 7f;
+    public float groundLightThreshold = 0.6f;
+    public float airLightThreshold = 0.8f;
+    public float lightRadius = 3f;
     List<Vector2Int> unlitBlocks = new List<Vector2Int>();
 
     public PlayerController player;
@@ -66,9 +67,10 @@ public class TerrainGeneration : MonoBehaviour
 
     private GameObject[] worldChunks;
 
-    private List<Vector2> worldTiles = new List<Vector2>();
-    private List<GameObject> worldTileObjects = new List<GameObject>();
-    //private List<TileClass> worldTileClasses = new List<TileClass>();
+    //private List<GameObject> worldTileObjects = new List<GameObject>();
+
+    private GameObject[,] world_ForegroundObjects;
+    private GameObject[,] world_BackgroundObjects;
 
     private TileClass[,] world_BackgroundTiles;
     private TileClass[,] world_ForegroundTiles;
@@ -102,6 +104,8 @@ public class TerrainGeneration : MonoBehaviour
     {
         world_BackgroundTiles = new TileClass[worldSize, worldSize];
         world_ForegroundTiles = new TileClass[worldSize, worldSize];
+        world_ForegroundObjects = new GameObject[worldSize, worldSize];
+        world_BackgroundObjects = new GameObject[worldSize, worldSize];
         // initialize light
         worldTilesMap = new Texture2D(worldSize, worldSize);
         //worldTilesMap.filterMode = FilterMode.Point;
@@ -339,7 +343,7 @@ public class TerrainGeneration : MonoBehaviour
         // создаем список со спрайтами
         TileClass tileSprites;
 
-        for (int x = 0; x < worldSize; x++)
+        for (int x = 0; x < worldSize - 1; x++)
         {
             // узнаем текущий биом
             curBiome = GetCurrentBiome(x, 0);
@@ -436,7 +440,7 @@ public class TerrainGeneration : MonoBehaviour
                     {
                         // generate tree
                         // если есть блок чтобы сгенерировать дерево
-                        if (worldTiles.Contains(new Vector2(x, y)))
+                        if (GetTileClass(x,y))
                         {
                             if (curBiome.biomeName == "Desert")
                             {
@@ -458,7 +462,7 @@ public class TerrainGeneration : MonoBehaviour
                         if (g == 1)
                         {
                             // если есть блок чтобы сгенерировать траву
-                            if (worldTiles.Contains(new Vector2(x, y)))
+                            if (GetTileClass(x, y))
                             {
                                 // и есть спрайт для травы
                                 if (curBiome.tileAtlas.tallGrass != null)
@@ -553,25 +557,16 @@ public class TerrainGeneration : MonoBehaviour
 
     public void RemoveTile(int x, int y)
     {
-        if (worldTiles.Contains(new Vector2Int(x, y)) && x >= 0 && x <= worldSize && y >= 0 && y <= worldSize)
+        if (GetTileClass(x, y) && x >= 0 && x <= worldSize && y >= 0 && y <= worldSize)
         {
             TileClass tile = GetTileClass(x, y);
+            RemoveTileFromWorld(x, y);
             if (tile.wallVariant != null)
             {
                 if(tile.naturallyPlaced)
                     PlaceTile(tile.wallVariant, x ,y, true);
             }
 
-            Destroy(worldTileObjects[worldTiles.IndexOf(new Vector2(x, y))]);
-
-            if (GetTileClass(x, y))
-            {
-                if (GetTileClass(x, y).inBackGround && GetTileClass(x, y).name.ToLower().Contains("wall"))
-                {
-                    worldTilesMap.SetPixel(x, y, Color.white);
-                    LightBlock(x, y, 1f, 0);
-                }
-            }
 
             if (tile.tileDrop)
             {
@@ -580,9 +575,17 @@ public class TerrainGeneration : MonoBehaviour
                     tile.tileDrop;
             }
 
-            worldTileObjects.RemoveAt(worldTiles.IndexOf(new Vector2(x, y)));
-            RemoveTileFromWorld(x, y);
-            worldTiles.RemoveAt(worldTiles.IndexOf(new Vector2(x, y)));
+
+            if (!GetTileClass(x, y))
+            {
+                worldTilesMap.SetPixel(x, y, Color.white);
+                LightBlock(x, y, 1f, 0);
+                worldTilesMap.Apply();
+            }
+
+            //worldTileObjects.RemoveAt(worldTiles.IndexOf(new Vector2(x, y)));
+            Destroy(GetObjectTile(x, y));
+            RemoveObjectTileFromWorld(x, y);
 
             worldTilesMap.Apply();
         }
@@ -608,20 +611,50 @@ public class TerrainGeneration : MonoBehaviour
     {
         if (x >= 0 && x <= worldSize && y >= 0 && y <= worldSize)
         {
-            if (!worldTiles.Contains(new Vector2Int(x, y)))
+            if (tile.inBackGround)
             {
-                RemoveLightSource(x, y);
-                PlaceTile(tile, x, y, isNaturallyPlaced);
-            }
-            else
-            {
-                if (world_ForegroundTiles[x,y].inBackGround)
+                if (!GetTileClass(x, y).inBackGround)
                 {
-                    RemoveLightSource(x, y);
-                    //RemoveTile(x, y);
+                    RemoveLightSource(x,y);
                     PlaceTile(tile, x, y, isNaturallyPlaced);
                 }
             }
+            else
+            {
+                if (GetTileClass(x - 1, y) ||
+                    GetTileClass(x + 1, y) ||
+                    GetTileClass(x, y + -1) ||
+                    GetTileClass(x, y - 1))
+                {
+                    if (!GetTileClass(x, y))
+                    {
+                        RemoveLightSource(x, y);
+                        PlaceTile(tile, x, y, isNaturallyPlaced);
+                    }
+                    else
+                    {
+                        if (GetTileClass(x, y).inBackGround)
+                        {
+                            RemoveLightSource(x, y);
+                            PlaceTile(tile, x, y, isNaturallyPlaced);
+                        }
+                    }
+                }
+            }
+            //if (!worldTiles.Contains(new Vector2Int(x, y)))
+            //{
+            //    RemoveLightSource(x, y);
+            //    PlaceTile(tile, x, y, isNaturallyPlaced);
+            //}
+            //else
+            //{
+            //    if (world_ForegroundTiles[x,y].inBackGround)
+            //    {
+            //        RemoveLightSource(x, y);
+            //        //RemoveTile(x, y);
+            //        PlaceTile(tile, x, y, isNaturallyPlaced);
+            //    }
+            //}
         }
     }
 
@@ -677,8 +710,7 @@ public class TerrainGeneration : MonoBehaviour
 
             TileClass newTileClass = TileClass.CreateInstance(tile, isNaturallyPlaced);
             // добавляем в список
-            worldTiles.Add(newTile.transform.position - (Vector3.one * 0.5f));
-            worldTileObjects.Add(newTile);
+            AddTileObjectToWorld(x, y, newTile, newTileClass);
             AddTileToWorld(x, y, newTileClass);
         }
     }
@@ -695,6 +727,19 @@ public class TerrainGeneration : MonoBehaviour
         }
     }
 
+    void AddTileObjectToWorld(int x, int y, GameObject tileObject, TileClass tile)
+    {
+        if (tile.inBackGround)
+        {
+            world_BackgroundObjects[x, y] = tileObject;
+        }
+        else
+        {
+            world_ForegroundObjects[x, y] = tileObject;
+        }
+    }
+
+
     void RemoveTileFromWorld(int x, int y)
     {
         if (world_ForegroundTiles[x, y] != null)
@@ -704,6 +749,18 @@ public class TerrainGeneration : MonoBehaviour
         else if(world_BackgroundTiles[x, y] != null)
         {
             world_BackgroundTiles[x, y] = null;
+        }
+    }
+
+    void RemoveObjectTileFromWorld(int x, int y)
+    {
+        if (world_ForegroundObjects[x, y] != null)
+        {
+            world_ForegroundObjects[x, y] = null;
+        }
+        else if (world_BackgroundObjects[x, y] != null)
+        {
+            world_BackgroundObjects[x, y] = null;
         }
     }
 
@@ -721,11 +778,34 @@ public class TerrainGeneration : MonoBehaviour
         return null;
     }
 
+    GameObject GetObjectTile(int x, int y)
+    {
+        if (world_ForegroundObjects[x, y] != null)
+        {
+            return world_ForegroundObjects[x, y];
+        }
+        else if (world_BackgroundObjects[x, y] != null)
+        {
+            return world_BackgroundObjects[x, y];
+        }
+
+        return null;
+    }
+
     void LightBlock(int x, int y, float intensity, int iteration) 
     {
         if (iteration < lightRadius)
         {
             worldTilesMap.SetPixel(x, y, Color.white * intensity);
+
+            float thresh = groundLightThreshold;
+            if (x >= 0 && y >= 0 && x <= worldSize && y <= worldSize)
+            {
+                if (world_ForegroundTiles[x, y])
+                    thresh = groundLightThreshold;
+                else
+                    thresh = airLightThreshold;
+            }
 
             for (int nx = x - 1; nx < x + 2; nx++)
             {
@@ -734,7 +814,9 @@ public class TerrainGeneration : MonoBehaviour
                     if (nx != x || ny != y)
                     {
                         float dist = Vector2.Distance(new Vector2(x, y), new Vector2(nx, ny));
-                        float targetIntensity = Mathf.Pow(0.7f, dist) * intensity;
+
+                        float targetIntensity = Mathf.Pow(thresh, dist) * intensity;
+
                         if (worldTilesMap.GetPixel(nx, ny) != null)
                         {
                             if (worldTilesMap.GetPixel(nx, ny).r < targetIntensity)
