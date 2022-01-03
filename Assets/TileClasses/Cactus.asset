@@ -13,5 +13,9 @@ MonoBehaviour:
   m_Name: Cactus
   m_EditorClassIdentifier: 
   tileName: Cactus
+  wallVariant: {fileID: 0}
   tileSprites:
   - {fileID: 21300000, guid: ed23b3f57c47e7d4f871bb74ac658c8e, type: 3}
+  inBackGround: 1
+  naturallyPlaced: 1
+  tileDrop: {fileID: 21300000, guid: ed23b3f57c47e7d4f871bb74ac658c8e, type: 3}

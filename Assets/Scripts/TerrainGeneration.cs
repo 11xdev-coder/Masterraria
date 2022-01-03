@@ -563,8 +563,8 @@ public class TerrainGeneration : MonoBehaviour
             RemoveTileFromWorld(x, y);
             if (tile.wallVariant != null)
             {
-                if(tile.naturallyPlaced)
-                    PlaceTile(tile.wallVariant, x ,y, true);
+                if (tile.naturallyPlaced)
+                    PlaceTile(tile.wallVariant, x, y, true);
             }
 
 
@@ -576,12 +576,12 @@ public class TerrainGeneration : MonoBehaviour
             }
 
 
-            if (!GetTileClass(x, y))
-            {
-                worldTilesMap.SetPixel(x, y, Color.white);
-                LightBlock(x, y, 1f, 0);
-                worldTilesMap.Apply();
-            }
+            //if (!GetTileClass(x, y))
+            //{
+            //    worldTilesMap.SetPixel(x, y, Color.white);
+            //    LightBlock(x, y, 1f, 0);
+            //    worldTilesMap.Apply();
+            //}
 
             //worldTileObjects.RemoveAt(worldTiles.IndexOf(new Vector2(x, y)));
             Destroy(GetObjectTile(x, y));
@@ -615,7 +615,7 @@ public class TerrainGeneration : MonoBehaviour
             {
                 if (!GetTileClass(x, y).inBackGround)
                 {
-                    RemoveLightSource(x,y);
+                    //RemoveLightSource(x,y);
                     PlaceTile(tile, x, y, isNaturallyPlaced);
                 }
             }
@@ -628,14 +628,14 @@ public class TerrainGeneration : MonoBehaviour
                 {
                     if (!GetTileClass(x, y))
                     {
-                        RemoveLightSource(x, y);
+                        //RemoveLightSource(x, y);
                         PlaceTile(tile, x, y, isNaturallyPlaced);
                     }
                     else
                     {
                         if (GetTileClass(x, y).inBackGround)
                         {
-                            RemoveLightSource(x, y);
+                            //RemoveLightSource(x, y);
                             PlaceTile(tile, x, y, isNaturallyPlaced);
                         }
                     }
@@ -799,13 +799,13 @@ public class TerrainGeneration : MonoBehaviour
             worldTilesMap.SetPixel(x, y, Color.white * intensity);
 
             float thresh = groundLightThreshold;
-            if (x >= 0 && y >= 0 && x <= worldSize && y <= worldSize)
-            {
-                if (world_ForegroundTiles[x, y])
-                    thresh = groundLightThreshold;
-                else
-                    thresh = airLightThreshold;
-            }
+            //if (x >= 0 && y >= 0 && x <= worldSize && y <= worldSize)
+            //{
+            //    if (world_ForegroundTiles[x, y])
+            //        thresh = groundLightThreshold;
+            //    else
+            //        thresh = airLightThreshold;
+            //}
 
             for (int nx = x - 1; nx < x + 2; nx++)
             {
