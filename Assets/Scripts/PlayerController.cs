@@ -5,10 +5,12 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public int selectedSlotIndex = 0;
+    public GameObject hotbarSelector;
     public Inventory inventory;
     public bool inventoryShowing = false;
 
-    public TileClass selectedTile;
+    public ItemClass selectedItem;
 
     public float moveSpeed;
     public float jumpForce;
@@ -39,22 +41,6 @@ public class PlayerController : MonoBehaviour
     public void Spawn()
     {
         GetComponent<Transform>().position = spawnPos;
-    }
-
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Ground"))
-        {
-            onGround = true;
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Ground"))
-        {
-            onGround = false;
-        }
     }
 
     private void FixedUpdate()
@@ -88,6 +74,21 @@ public class PlayerController : MonoBehaviour
         hit = Input.GetMouseButtonDown(0);
         place = Input.GetMouseButtonDown(1);
 
+        if (Input.GetAxis("Mouse ScrollWheel") > 0)
+        {
+            // scroll up
+            if (selectedSlotIndex < inventory.inventoryWidth)
+                selectedSlotIndex += 1;
+        }
+        else if (Input.GetAxis("Mouse ScrollWheel") < 0)
+        {
+            // scroll down
+            if (selectedSlotIndex > 0)
+                selectedSlotIndex -= 1;
+        }
+
+        hotbarSelector.transform.position = inventory.hotbarUISlots[selectedSlotIndex].transform.position;
+
         if (Input.GetKeyDown(KeyCode.E))
         {
             inventoryShowing = !inventoryShowing;
@@ -100,10 +101,15 @@ public class PlayerController : MonoBehaviour
             {
                 terrainGenerator.RemoveTile(mousePos.x, mousePos.y);
             }
-            else if (place)
+            
+            if (place)
             {
-                terrainGenerator.CheckTile(selectedTile, mousePos.x, mousePos.y, false);
+                if (selectedItem.itemType == ItemClass.ItemType.block)
+                {
+                    terrainGenerator.CheckTile(selectedItem.tile, mousePos.x, mousePos.y, false);
+                }
             }
+
         }
 
         mousePos.x = Mathf.RoundToInt(Camera.main.ScreenToWorldPoint(Input.mousePosition).x - 0.5f);

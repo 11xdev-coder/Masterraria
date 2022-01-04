@@ -542,9 +542,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f118e44d464574143aa0514cd06e239a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  selectedSlotIndex: 0
+  hotbarSelector: {fileID: 0}
   inventory: {fileID: 0}
   inventoryShowing: 0
-  selectedTile: {fileID: 11400000, guid: df02bc18626e058449ed9f27631176cd, type: 2}
   moveSpeed: 3
   jumpForce: 15
   onGround: 0
@@ -589,12 +590,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stackLimit: 99
   tool: {fileID: 11400000, guid: e7e6a8176d038d246be5d034974649a0, type: 2}
-  offset: {x: -200, y: -75}
+  inventoryOffset: {x: -195, y: -60}
+  hotbarOffset: {x: -435, y: 210}
   multiplier: {x: 50, y: 50}
   inventoryUI: {fileID: 0}
+  hotbarUI: {fileID: 0}
   inventorySlotPrefab: {fileID: 6019799107091317634, guid: 8f7333d30f682a2488e801863ef1da22, type: 3}
   inventoryWidth: 9
   inventoryHeight: 4
+  hotbarUISlots: []
 --- !u!1 &6958172829086165718
 GameObject:
   m_ObjectHideFlags: 0
