@@ -31,8 +31,9 @@ public class ItemClass
     public ItemClass(TileClass _tile)
     {
         name = _tile.name;
-        sprite = _tile.tileSprites[0];
+        sprite = _tile.tileDrop;
         isStackable = _tile.isStackable;
+        itemType = ItemType.block;
     }
 
     public ItemClass(ToolClass _tool)
@@ -40,5 +41,7 @@ public class ItemClass
         name = _tool.name;
         sprite = _tool.sprite;
         isStackable = false;
+        itemType = ItemType.tool;
+        toolType = _tool.toolType;
     }
 }
