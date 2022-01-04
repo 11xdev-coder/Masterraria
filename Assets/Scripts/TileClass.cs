@@ -12,6 +12,7 @@ public class TileClass : ScriptableObject
     public bool inBackGround = true;
     public bool naturallyPlaced = true;
     public Sprite tileDrop;
+    public bool isStackable;
 
     public static TileClass CreateInstance(TileClass tile, bool isNaturallyPlaced)
     {

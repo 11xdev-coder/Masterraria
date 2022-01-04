@@ -541,6 +541,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82098b70bd068d641b1545c5debc25db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tool: {fileID: 11400000, guid: e7e6a8176d038d246be5d034974649a0, type: 2}
   offset: {x: -200, y: -75}
   multiplier: {x: 50, y: 50}
   inventoryUI: {fileID: 0}
