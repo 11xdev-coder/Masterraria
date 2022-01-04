@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Xml.Serialization;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class TerrainGeneration : MonoBehaviour
 {
@@ -572,18 +574,18 @@ public class TerrainGeneration : MonoBehaviour
             {
                 GameObject newTileDrop = Instantiate(tileDrop, new Vector2(x, y + 0.5f), Quaternion.identity);
                 newTileDrop.GetComponent<SpriteRenderer>().sprite =
-                    tile.tileDrop;
-                ItemClass tileDropItem = new ItemClass(tile);
+                    tile.tileDrop.tileSprites[0];
+                ItemClass tileDropItem = new ItemClass(tile.tileDrop);
                 newTileDrop.GetComponent<TileDropController>().item = tileDropItem;
             }
 
 
-            //if (!GetTileClass(x, y))
-            //{
-            //    worldTilesMap.SetPixel(x, y, Color.white);
-            //    LightBlock(x, y, 1f, 0);
-            //    worldTilesMap.Apply();
-            //}
+            if (!GetTileClass(x, y))
+            {
+                worldTilesMap.SetPixel(x, y, Color.white);
+                LightBlock(x, y, 1f, 0);
+                worldTilesMap.Apply();
+            }
 
             //worldTileObjects.RemoveAt(worldTiles.IndexOf(new Vector2(x, y)));
             Destroy(GetObjectTile(x, y));
@@ -615,10 +617,24 @@ public class TerrainGeneration : MonoBehaviour
         {
             if (tile.inBackGround)
             {
-                if (!GetTileClass(x, y).inBackGround)
+                if (GetTileClass(x - 1, y) ||
+                    GetTileClass(x + 1, y) ||
+                    GetTileClass(x, y + -1) ||
+                    GetTileClass(x, y - 1))
                 {
-                    //RemoveLightSource(x,y);
-                    PlaceTile(tile, x, y, isNaturallyPlaced);
+                    if (!GetTileClass(x, y))
+                    {
+                        RemoveLightSource(x, y);
+                        PlaceTile(tile, x, y, isNaturallyPlaced);
+                    }
+                    else
+                    {
+                        if (!GetTileClass(x, y).inBackGround)
+                        {
+                            RemoveLightSource(x, y);
+                            PlaceTile(tile, x, y, isNaturallyPlaced);
+                        }
+                    }
                 }
             }
             else

@@ -162,7 +162,8 @@ public class Inventory : MonoBehaviour
                 {
                     if (inventorySlots[x, y].item.sprite == item.sprite)
                     {
-                        return new Vector2Int(x, y);
+                        if(item.isStackable)
+                            return new Vector2Int(x, y);
                     }
                 }
             }

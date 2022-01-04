@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class ItemClass
 {
     public enum ItemType
@@ -24,24 +25,26 @@ public class ItemClass
     public TileClass tile;
     public ToolClass tool;
 
-    public string name;
+    public string itemName;
     public Sprite sprite;
     public bool isStackable;
 
     public ItemClass(TileClass _tile)
     {
-        name = _tile.name;
-        sprite = _tile.tileDrop;
+        itemName = _tile.tileName;
+        sprite = _tile.tileDrop.tileSprites[0];
         isStackable = _tile.isStackable;
         itemType = ItemType.block;
+        tile = _tile;
     }
 
     public ItemClass(ToolClass _tool)
     {
-        name = _tool.name;
+        itemName = _tool.name;
         sprite = _tool.sprite;
         isStackable = false;
         itemType = ItemType.tool;
         toolType = _tool.toolType;
+        tool = _tool;
     }
 }

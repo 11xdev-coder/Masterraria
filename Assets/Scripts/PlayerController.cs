@@ -74,13 +74,13 @@ public class PlayerController : MonoBehaviour
         hit = Input.GetMouseButtonDown(0);
         place = Input.GetMouseButtonDown(1);
 
-        if (Input.GetAxis("Mouse ScrollWheel") > 0)
+        if (Input.GetAxis("Mouse ScrollWheel") < 0)
         {
             // scroll up
             if (selectedSlotIndex < inventory.inventoryWidth)
                 selectedSlotIndex += 1;
         }
-        else if (Input.GetAxis("Mouse ScrollWheel") < 0)
+        else if (Input.GetAxis("Mouse ScrollWheel") > 0)
         {
             // scroll down
             if (selectedSlotIndex > 0)
@@ -88,6 +88,13 @@ public class PlayerController : MonoBehaviour
         }
 
         hotbarSelector.transform.position = inventory.hotbarUISlots[selectedSlotIndex].transform.position;
+
+        if (inventory.inventorySlots[selectedSlotIndex, inventory.inventoryHeight - 1] != null)
+            selectedItem = inventory.inventorySlots[selectedSlotIndex, inventory.inventoryHeight - 1].item;
+        else
+        {
+            selectedItem = null;
+        }
 
         if (Input.GetKeyDown(KeyCode.E))
         {
@@ -104,9 +111,12 @@ public class PlayerController : MonoBehaviour
             
             if (place)
             {
-                if (selectedItem.itemType == ItemClass.ItemType.block)
+                if (selectedItem != null)
                 {
-                    terrainGenerator.CheckTile(selectedItem.tile, mousePos.x, mousePos.y, false);
+                    if (selectedItem.itemType == ItemClass.ItemType.block)
+                    {
+                        terrainGenerator.CheckTile(selectedItem.tile, mousePos.x, mousePos.y, false);
+                    }
                 }
             }
 
