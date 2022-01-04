@@ -19,4 +19,5 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 68b77e3936d4f994ab4ee313d52add75, type: 3}
   inBackGround: 0
   naturallyPlaced: 1
-  tileDrop: {fileID: 21300000, guid: d8f682cc3a878e941b5d541ed5741e0b, type: 3}
+  tileDrop: {fileID: 11400000}
+  isStackable: 1

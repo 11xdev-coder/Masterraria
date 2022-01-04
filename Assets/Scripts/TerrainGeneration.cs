@@ -611,7 +611,7 @@ public class TerrainGeneration : MonoBehaviour
         }
     }
 
-    public void CheckTile(TileClass tile, int x, int y, bool isNaturallyPlaced)
+    public bool CheckTile(TileClass tile, int x, int y, bool isNaturallyPlaced)
     {
         if (x >= 0 && x <= worldSize && y >= 0 && y <= worldSize)
         {
@@ -626,6 +626,7 @@ public class TerrainGeneration : MonoBehaviour
                     {
                         RemoveLightSource(x, y);
                         PlaceTile(tile, x, y, isNaturallyPlaced);
+                        return true;
                     }
                     else
                     {
@@ -633,6 +634,7 @@ public class TerrainGeneration : MonoBehaviour
                         {
                             RemoveLightSource(x, y);
                             PlaceTile(tile, x, y, isNaturallyPlaced);
+                            return true;
                         }
                     }
                 }
@@ -648,6 +650,7 @@ public class TerrainGeneration : MonoBehaviour
                     {
                         //RemoveLightSource(x, y);
                         PlaceTile(tile, x, y, isNaturallyPlaced);
+                        return true;
                     }
                     else
                     {
@@ -655,6 +658,7 @@ public class TerrainGeneration : MonoBehaviour
                         {
                             //RemoveLightSource(x, y);
                             PlaceTile(tile, x, y, isNaturallyPlaced);
+                            return true;
                         }
                     }
                 }
@@ -674,6 +678,8 @@ public class TerrainGeneration : MonoBehaviour
             //    }
             //}
         }
+
+        return false;
     }
 
     public void PlaceTile(TileClass tile, int x, int y, bool isNaturallyPlaced)

@@ -13,8 +13,11 @@ MonoBehaviour:
   m_Name: StoneWall
   m_EditorClassIdentifier: 
   tileName: Stone Wall
+  wallVariant: {fileID: 0}
   tileSprites:
   - {fileID: 21300000, guid: 53888bc9e93905445b08ddd1a8bd8f60, type: 3}
   - {fileID: 21300000, guid: ae000846342da5f4ca08a45f0da49f6f, type: 3}
   inBackGround: 1
-  tileDrop: 1
+  naturallyPlaced: 1
+  tileDrop: {fileID: 0}
+  isStackable: 1

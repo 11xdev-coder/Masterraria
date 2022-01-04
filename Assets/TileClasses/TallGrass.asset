@@ -13,10 +13,13 @@ MonoBehaviour:
   m_Name: TallGrass
   m_EditorClassIdentifier: 
   tileName: TallGrass
+  wallVariant: {fileID: 0}
   tileSprites:
   - {fileID: 21300000, guid: 5ba4160cb8221154da53b432d89001a6, type: 3}
   - {fileID: 21300000, guid: a916e9e3dc9db374ca13302763a1b565, type: 3}
   - {fileID: 21300000, guid: 142ebf28975bd89459746372a4f28c15, type: 3}
   - {fileID: 21300000, guid: 92b09c21a0dcde84e829767c0b519469, type: 3}
   inBackGround: 1
-  tileDrop: 0
+  naturallyPlaced: 1
+  tileDrop: {fileID: 0}
+  isStackable: 1

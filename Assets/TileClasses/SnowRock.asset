@@ -13,7 +13,10 @@ MonoBehaviour:
   m_Name: SnowRock
   m_EditorClassIdentifier: 
   tileName: 
+  wallVariant: {fileID: 0}
   tileSprites:
   - {fileID: 21300000, guid: 96dc1de981795da44b9d81c2401acd71, type: 3}
   inBackGround: 1
-  tileDrop: 0
+  naturallyPlaced: 1
+  tileDrop: {fileID: 0}
+  isStackable: 1

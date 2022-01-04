@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.Http.Headers;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
@@ -90,6 +91,20 @@ public class Inventory : MonoBehaviour
                     uiSlots[x, y].transform.GetChild(0).GetComponent<Image>().enabled = true;
                     uiSlots[x, y].transform.GetChild(0).GetComponent<Image>().sprite = inventorySlots[x, y].item.sprite;
 
+                    if (inventorySlots[x, y].item.itemType == ItemClass.ItemType.block)
+                    {
+                        if (inventorySlots[x, y].item.tile.inBackGround)
+                        {
+                            uiSlots[x, y].transform.GetChild(0).GetComponent<Image>().color =
+                                new Color(0.5f, 0.5f, 0.5f);
+                        }
+                        else
+                        {
+                            uiSlots[x, y].transform.GetChild(0).GetComponent<Image>().color =
+                                Color.white;
+                        }
+                    }
+
                     uiSlots[x, y].transform.GetChild(1).GetComponent<TMP_Text>().text = inventorySlots[x, y].quantity.ToString();
                     uiSlots[x, y].transform.GetChild(1).GetComponent<TMP_Text>().enabled = true;
                 }
@@ -111,6 +126,20 @@ public class Inventory : MonoBehaviour
                 hotbarUISlots[x].transform.GetChild(0).GetComponent<Image>().enabled = true;
                 hotbarUISlots[x].transform.GetChild(0).GetComponent<Image>().sprite = inventorySlots[x, inventoryHeight - 1].item.sprite;
 
+                if (inventorySlots[x, inventoryHeight - 1].item.itemType == ItemClass.ItemType.block)
+                {
+                    if (inventorySlots[x, inventoryHeight - 1].item.tile.inBackGround)
+                    {
+                        hotbarUISlots[x].transform.GetChild(0).GetComponent<Image>().color =
+                            new Color(0.5f, 0.5f, 0.5f);
+                    }
+                    else
+                    {
+                        hotbarUISlots[x].transform.GetChild(0).GetComponent<Image>().color =
+                            Color.white;
+                    }
+                }
+
                 hotbarUISlots[x].transform.GetChild(1).GetComponent<TMP_Text>().text = inventorySlots[x, inventoryHeight - 1].quantity.ToString();
                 hotbarUISlots[x].transform.GetChild(1).GetComponent<TMP_Text>().enabled = true;
             }
@@ -123,11 +152,11 @@ public class Inventory : MonoBehaviour
         bool added = false;
         if (itemPos != Vector2Int.one * -1)
         {
-            if (inventorySlots[itemPos.x, itemPos.y].quantity <= stackLimit)
-            {
-                inventorySlots[itemPos.x, itemPos.y].quantity += 1;
-                added = true;
-            }
+            //if (inventorySlots[itemPos.x, itemPos.y].quantity <= stackLimit)
+            //{
+            inventorySlots[itemPos.x, itemPos.y].quantity += 1;
+            added = true;
+            //}
         }
         if(!added)
         {
@@ -162,7 +191,7 @@ public class Inventory : MonoBehaviour
                 {
                     if (inventorySlots[x, y].item.sprite == item.sprite)
                     {
-                        if(item.isStackable)
+                        if(item.isStackable && inventorySlots[x, y].quantity <= stackLimit)
                             return new Vector2Int(x, y);
                     }
                 }
@@ -172,8 +201,25 @@ public class Inventory : MonoBehaviour
         return Vector2Int.one * -1;
     }
 
-    public void Remove(ItemClass item)
+    public bool Remove(ItemClass item)
     {
+        for (int y = inventoryHeight - 1; y >= 0; y--)
+        {
+            for (int x = 0; x < inventoryWidth; x++)
+            {
+                if (inventorySlots[x, y].item == item)
+                {
+                    inventorySlots[x, y].quantity -= 1;
+                    if (inventorySlots[x, y].quantity == 0)
+                    {
+                        inventorySlots[x, y] = null;
+                    }
+                    UpdateInventoryUI();
+                    return true;
+                }
+            }
+        }
 
+        return false;
     }
 }
