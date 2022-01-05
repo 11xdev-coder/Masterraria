@@ -8,24 +8,32 @@ using UnityEngine.UI;
 
 public class Inventory : MonoBehaviour
 {
+    [Header("Item Settings")]
     public int stackLimit = 99;
-    public ToolClass tool;
+    public ToolClass pickaxe;
+    public ToolClass axe;
+    public ToolClass hammer;
 
+    [Header("UI settings")]
     public Vector2 inventoryOffset;
     public Vector2 hotbarOffset;
     public Vector2 multiplier;
 
+    [Header("UIs")]
     public GameObject inventoryUI;
     public GameObject hotbarUI;
     public GameObject inventorySlotPrefab;
 
+    [Header("Inventory Settings")]
     public int inventoryWidth;
     public int inventoryHeight;
     public InventorySlot[,] inventorySlots;
     public GameObject[,] uiSlots;
 
+    [Header("Hotbar settings")]
     public InventorySlot[] hotbarSlots;
     public GameObject[] hotbarUISlots;
+
 
     private void Start()
     {
@@ -36,9 +44,9 @@ public class Inventory : MonoBehaviour
 
         SetupUI();
         UpdateInventoryUI();
-        Add(new ItemClass(tool));
-        Add(new ItemClass(tool));
-        Add(new ItemClass(tool));
+        Add(new ItemClass(pickaxe));
+        Add(new ItemClass(axe));
+        Add(new ItemClass(hammer));
     }
     public void SetupUI()
     {
@@ -169,7 +177,7 @@ public class Inventory : MonoBehaviour
                     if (inventorySlots[x, y] == null)
                     {
                         inventorySlots[x, y] = new InventorySlot
-                            {item = item, position = new Vector2Int(x, y), quantity = 1};
+                            (item, new Vector2Int(x, y), 1);
                         added = true;
                         break;
                     }
@@ -201,13 +209,28 @@ public class Inventory : MonoBehaviour
         return Vector2Int.one * -1;
     }
 
+    // public void Drag()
+    // {
+    //     //Cursor.SetCursor(texture, Cursor.Auto);
+    //     //Debug.Log(GetClosestSlot().GetItemName());
+    //     if (isMovingItem)
+    //     {
+    //         EndItemMove();
+    //     }
+    //     else
+    //     {
+    //         BeginToDrag();
+    //     }
+    // }
+    
+
     public bool Remove(ItemClass item)
     {
         for (int y = inventoryHeight - 1; y >= 0; y--)
         {
             for (int x = 0; x < inventoryWidth; x++)
             {
-                if (inventorySlots[x, y].item == item)
+                if (inventorySlots[x, y].item.itemName == item.itemName)
                 {
                     inventorySlots[x, y].quantity -= 1;
                     if (inventorySlots[x, y].quantity == 0)

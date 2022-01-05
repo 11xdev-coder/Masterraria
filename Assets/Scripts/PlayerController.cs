@@ -95,6 +95,7 @@ public class PlayerController : MonoBehaviour
         {
             selectedItem = null;
         }
+        //Debug.Log(selectedItem);
 
         if (Input.GetKeyDown(KeyCode.E))
         {
@@ -106,7 +107,8 @@ public class PlayerController : MonoBehaviour
         {
             if (hit)
             {
-                terrainGenerator.RemoveTile(mousePos.x, mousePos.y);
+                //terrainGenerator.RemoveTile(mousePos.x, mousePos.y);
+                terrainGenerator.BreakTile(mousePos.x, mousePos.y, selectedItem);
             }
             
             if (place)
@@ -122,6 +124,11 @@ public class PlayerController : MonoBehaviour
             }
 
         }
+
+        // if (hit && inventoryShowing)
+        // {
+        //     inventory.Drag();
+        // }
 
         mousePos.x = Mathf.RoundToInt(Camera.main.ScreenToWorldPoint(Input.mousePosition).x - 0.5f);
         mousePos.y = Mathf.RoundToInt(Camera.main.ScreenToWorldPoint(Input.mousePosition).y - 0.5f);

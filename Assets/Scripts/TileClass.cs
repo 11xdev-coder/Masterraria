@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "NewTileClass", menuName = "Tile Class")]
@@ -12,6 +13,7 @@ public class TileClass : ScriptableObject
     public bool inBackGround = true;
     public bool naturallyPlaced = true;
     public TileClass tileDrop;
+    public ItemClass.ToolType toolToBreak;
     public bool isStackable;
 
     public static TileClass CreateInstance(TileClass tile, bool isNaturallyPlaced)
@@ -29,6 +31,7 @@ public class TileClass : ScriptableObject
         tileSprites = tile.tileSprites;
         inBackGround = tile.inBackGround;
         naturallyPlaced = isNaturallyPlaced;
+        toolToBreak = tile.toolToBreak;
         tileDrop = tile.tileDrop;
     }
 }

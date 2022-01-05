@@ -557,6 +557,24 @@ public class TerrainGeneration : MonoBehaviour
         PlaceTile(tileAtlas.leaf, x + 1, y + treeHeight + 1, true);
     }
 
+    public bool BreakTile(int x, int y, ItemClass item)
+    {
+        if (GetTileClass(x, y) && x >= 0 && x <= worldSize && y >= 0 && y <= worldSize)
+        {
+            TileClass tile = GetTileClass(x, y);
+            if (item.itemType == ItemClass.ItemType.tool)
+            {
+                if (tile.toolToBreak == item.toolType)
+                {
+                    RemoveTile(x, y);
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+    
     public void RemoveTile(int x, int y)
     {
         if (GetTileClass(x, y) && x >= 0 && x <= worldSize && y >= 0 && y <= worldSize)
