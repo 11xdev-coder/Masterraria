@@ -5,6 +5,7 @@ using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class Inventory : MonoBehaviour
 {
@@ -13,6 +14,9 @@ public class Inventory : MonoBehaviour
     public ToolClass pickaxe;
     public ToolClass axe;
     public ToolClass hammer;
+    public TileClass chest;
+    public GameObject dropPrefab;
+    public GameObject drop;
 
     [Header("UI settings")]
     public Vector2 inventoryOffset;
@@ -21,6 +25,7 @@ public class Inventory : MonoBehaviour
 
     [Header("UIs")]
     public GameObject inventoryUI;
+
     public GameObject hotbarUI;
     public GameObject inventorySlotPrefab;
 
@@ -33,6 +38,8 @@ public class Inventory : MonoBehaviour
     [Header("Hotbar settings")]
     public InventorySlot[] hotbarSlots;
     public GameObject[] hotbarUISlots;
+
+    public ItemClass tileDropItem;
 
 
     private void Start()
@@ -47,6 +54,7 @@ public class Inventory : MonoBehaviour
         Add(new ItemClass(pickaxe));
         Add(new ItemClass(axe));
         Add(new ItemClass(hammer));
+        Add(new ItemClass(chest));
     }
     public void SetupUI()
     {
@@ -59,7 +67,7 @@ public class Inventory : MonoBehaviour
                     inventoryUI.transform.GetChild(0).transform);
 
                 inventorySlot.GetComponent<RectTransform>().localPosition = 
-                    new Vector3((x * multiplier.x) + inventoryOffset.x, (y * multiplier.y) + inventoryOffset.y);
+                    new Vector3((x * multiplier.x) + inventoryOffset.x, (y * multiplier.y) + inventoryOffset.y, -7);
 
                 uiSlots[x,y] = inventorySlot;
                 inventorySlots[x, y] = null;
@@ -72,7 +80,7 @@ public class Inventory : MonoBehaviour
                 hotbarUI.transform.GetChild(0).transform);
 
             hotbarSlot.GetComponent<RectTransform>().localPosition =
-                new Vector3((x * multiplier.x) + hotbarOffset.x, hotbarOffset.y);
+                new Vector3((x * multiplier.x) + hotbarOffset.x, hotbarOffset.y, -7);
 
             hotbarUISlots[x] = hotbarSlot;
             hotbarSlots[x] = null;
@@ -88,33 +96,33 @@ public class Inventory : MonoBehaviour
             {
                 if (inventorySlots[x, y] == null)
                 {
-                    uiSlots[x, y].transform.GetChild(0).GetComponent<Image>().sprite = null;
-                    uiSlots[x, y].transform.GetChild(0).GetComponent<Image>().enabled = false;
+                    uiSlots[x, y].transform.GetChild(0).transform.GetChild(0).GetComponent<Image>().sprite = null;
+                    uiSlots[x, y].transform.GetChild(0).transform.GetChild(0).GetComponent<Image>().enabled = false;
 
-                    uiSlots[x, y].transform.GetChild(1).GetComponent<TMP_Text>().text = "0";
-                    uiSlots[x, y].transform.GetChild(1).GetComponent<TMP_Text>().enabled = false;
+                    uiSlots[x, y].transform.GetChild(0).transform.GetChild(1).GetComponent<TMP_Text>().text = "0";
+                    uiSlots[x, y].transform.GetChild(0).transform.GetChild(1).GetComponent<TMP_Text>().enabled = false;
                 }
                 else
                 {
-                    uiSlots[x, y].transform.GetChild(0).GetComponent<Image>().enabled = true;
-                    uiSlots[x, y].transform.GetChild(0).GetComponent<Image>().sprite = inventorySlots[x, y].item.sprite;
+                    uiSlots[x, y].transform.GetChild(0).transform.GetChild(0).GetComponent<Image>().enabled = true;
+                    uiSlots[x, y].transform.GetChild(0).transform.GetChild(0).GetComponent<Image>().sprite = inventorySlots[x, y].item.sprite;
 
                     if (inventorySlots[x, y].item.itemType == ItemClass.ItemType.block)
                     {
                         if (inventorySlots[x, y].item.tile.inBackGround)
                         {
-                            uiSlots[x, y].transform.GetChild(0).GetComponent<Image>().color =
+                            uiSlots[x, y].transform.GetChild(0).transform.GetChild(0).GetComponent<Image>().color =
                                 new Color(0.5f, 0.5f, 0.5f);
                         }
                         else
                         {
-                            uiSlots[x, y].transform.GetChild(0).GetComponent<Image>().color =
+                            uiSlots[x, y].transform.GetChild(0).transform.GetChild(0).GetComponent<Image>().color =
                                 Color.white;
                         }
                     }
 
-                    uiSlots[x, y].transform.GetChild(1).GetComponent<TMP_Text>().text = inventorySlots[x, y].quantity.ToString();
-                    uiSlots[x, y].transform.GetChild(1).GetComponent<TMP_Text>().enabled = true;
+                    uiSlots[x, y].transform.GetChild(0).transform.GetChild(1).GetComponent<TMP_Text>().text = inventorySlots[x, y].quantity.ToString();
+                    uiSlots[x, y].transform.GetChild(0).transform.GetChild(1).GetComponent<TMP_Text>().enabled = true;
                 }
             }
         }
@@ -123,33 +131,33 @@ public class Inventory : MonoBehaviour
         {
             if (inventorySlots[x, inventoryHeight - 1] == null)
             {
-                hotbarUISlots[x].transform.GetChild(0).GetComponent<Image>().sprite = null;
-                hotbarUISlots[x].transform.GetChild(0).GetComponent<Image>().enabled = false;
+                hotbarUISlots[x].transform.GetChild(0).transform.GetChild(0).GetComponent<Image>().sprite = null;
+                hotbarUISlots[x].transform.GetChild(0).transform.GetChild(0).GetComponent<Image>().enabled = false;
 
-                hotbarUISlots[x].transform.GetChild(1).GetComponent<TMP_Text>().text = "0";
-                hotbarUISlots[x].transform.GetChild(1).GetComponent<TMP_Text>().enabled = false;
+                hotbarUISlots[x].transform.GetChild(0).transform.GetChild(1).GetComponent<TMP_Text>().text = "0";
+                hotbarUISlots[x].transform.GetChild(0).transform.GetChild(1).GetComponent<TMP_Text>().enabled = false;
             }
             else
             {
-                hotbarUISlots[x].transform.GetChild(0).GetComponent<Image>().enabled = true;
-                hotbarUISlots[x].transform.GetChild(0).GetComponent<Image>().sprite = inventorySlots[x, inventoryHeight - 1].item.sprite;
+                hotbarUISlots[x].transform.GetChild(0).transform.GetChild(0).GetComponent<Image>().enabled = true;
+                hotbarUISlots[x].transform.GetChild(0).transform.GetChild(0).GetComponent<Image>().sprite = inventorySlots[x, inventoryHeight - 1].item.sprite;
 
                 if (inventorySlots[x, inventoryHeight - 1].item.itemType == ItemClass.ItemType.block)
                 {
                     if (inventorySlots[x, inventoryHeight - 1].item.tile.inBackGround)
                     {
-                        hotbarUISlots[x].transform.GetChild(0).GetComponent<Image>().color =
+                        hotbarUISlots[x].transform.GetChild(0).transform.GetChild(0).GetComponent<Image>().color =
                             new Color(0.5f, 0.5f, 0.5f);
                     }
                     else
                     {
-                        hotbarUISlots[x].transform.GetChild(0).GetComponent<Image>().color =
+                        hotbarUISlots[x].transform.GetChild(0).transform.GetChild(0).GetComponent<Image>().color =
                             Color.white;
                     }
                 }
 
-                hotbarUISlots[x].transform.GetChild(1).GetComponent<TMP_Text>().text = inventorySlots[x, inventoryHeight - 1].quantity.ToString();
-                hotbarUISlots[x].transform.GetChild(1).GetComponent<TMP_Text>().enabled = true;
+                hotbarUISlots[x].transform.GetChild(0).transform.GetChild(1).GetComponent<TMP_Text>().text = inventorySlots[x, inventoryHeight - 1].quantity.ToString();
+                hotbarUISlots[x].transform.GetChild(0).transform.GetChild(1).GetComponent<TMP_Text>().enabled = true;
             }
         }
     }
@@ -222,6 +230,16 @@ public class Inventory : MonoBehaviour
     //         BeginToDrag();
     //     }
     // }
+
+    public void Drop(ItemClass item)
+    {
+        GameObject newTileDrop = Instantiate(dropPrefab, new Vector2(transform.position.x + -transform.localScale.x, transform.position.y + 0.5f), Quaternion.identity);
+        newTileDrop.GetComponent<SpriteRenderer>().sprite =
+            item.sprite;
+        tileDropItem = item;
+        newTileDrop.GetComponent<TileDropController>().item = tileDropItem;
+        Remove(item);
+    }
     
 
     public bool Remove(ItemClass item)
@@ -230,7 +248,7 @@ public class Inventory : MonoBehaviour
         {
             for (int x = 0; x < inventoryWidth; x++)
             {
-                if (inventorySlots[x, y].item != null)
+                if (inventorySlots[x, y] != null)
                 {
                     if (inventorySlots[x, y].item.itemName == item.itemName)
                     {

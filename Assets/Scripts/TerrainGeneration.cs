@@ -689,6 +689,12 @@ public class TerrainGeneration : MonoBehaviour
                     }
                 }
             }
+
+            if (GetTileClass(x, y).tileName == "Chest")
+            {
+                player.chestShowing = true;
+                return true;
+            }
             //if (!worldTiles.Contains(new Vector2Int(x, y)))
             //{
             //    RemoveLightSource(x, y);
@@ -814,7 +820,7 @@ public class TerrainGeneration : MonoBehaviour
         }
     }
 
-    TileClass GetTileClass(int x, int y)
+    public TileClass GetTileClass(int x, int y)
     {
         if (world_ForegroundTiles[x, y] != null)
         {

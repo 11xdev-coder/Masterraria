@@ -497,6 +497,7 @@ GameObject:
   - component: {fileID: 6958172828430266198}
   - component: {fileID: 6958172828797437028}
   - component: {fileID: 1686314135748710964}
+  - component: {fileID: 9220121702618325764}
   m_Layer: 0
   m_Name: PlayerRoot
   m_TagString: Player
@@ -626,10 +627,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f118e44d464574143aa0514cd06e239a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 2147483647
   selectedSlotIndex: 0
   hotbarSelector: {fileID: 0}
   inventory: {fileID: 0}
   inventoryShowing: 0
+  chest: {fileID: 9220121702618325764}
+  chestShowing: 0
   selectedItem:
     itemType: 0
     toolType: 0
@@ -646,6 +652,7 @@ MonoBehaviour:
   hit: 0
   reachDistance: 5
   place: 0
+  openChest: 0
   spawnPos: {x: 0, y: 0}
   mousePos: {x: 0, y: 0}
   terrainGenerator: {fileID: 0}
@@ -685,6 +692,9 @@ MonoBehaviour:
   pickaxe: {fileID: 11400000, guid: e7e6a8176d038d246be5d034974649a0, type: 2}
   axe: {fileID: 11400000, guid: 5cb99c29240dbad4dbd2636037e2806c, type: 2}
   hammer: {fileID: 11400000, guid: 0f45c634d176ef746be0eda45143504d, type: 2}
+  chest: {fileID: 11400000, guid: 2aeace62b56e33e488e2aa1ff4cda537, type: 2}
+  dropPrefab: {fileID: 1631283158953607212, guid: 40520efbe993931439268f7066794daf, type: 3}
+  drop: {fileID: 0}
   inventoryOffset: {x: -195, y: -60}
   hotbarOffset: {x: -435, y: 210}
   multiplier: {x: 50, y: 50}
@@ -694,6 +704,34 @@ MonoBehaviour:
   inventoryWidth: 9
   inventoryHeight: 4
   hotbarUISlots: []
+  tileDropItem:
+    itemType: 0
+    toolType: 0
+    tile: {fileID: 0}
+    tool: {fileID: 0}
+    itemName: 
+    sprite: {fileID: 0}
+    isStackable: 0
+--- !u!114 &9220121702618325764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6958172828797437029}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 633f30c32e0e42041a7dfb3f7930ef27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stackLimit: 99
+  chestOffset: {x: -195, y: -60}
+  multiplier: {x: 50, y: 50}
+  chestUI: {fileID: 0}
+  inventorySlotPrefab: {fileID: 6019799107091317634, guid: 8f7333d30f682a2488e801863ef1da22, type: 3}
+  chestWidth: 5
+  chestHeight: 3
+  inventory: {fileID: 1686314135748710964}
 --- !u!1 &6958172829086165718
 GameObject:
   m_ObjectHideFlags: 0

@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
     public GameObject hotbarSelector;
     public Inventory inventory;
     public bool inventoryShowing = false;
+    public ChestUI chest;
+    public bool chestShowing = false;
 
     public ItemClass selectedItem;
     public GameObject handHolder;
@@ -27,6 +29,7 @@ public class PlayerController : MonoBehaviour
     public bool hit;
     public int reachDistance;
     public bool place;
+    public bool openChest;
 
     [HideInInspector]
     public Vector2 spawnPos;
@@ -84,6 +87,7 @@ public class PlayerController : MonoBehaviour
         horizontal = Input.GetAxis("Horizontal");
         hit = Input.GetMouseButtonDown(0);
         place = Input.GetMouseButtonDown(1);
+        openChest = Input.GetMouseButtonDown(2);
 
         if (Input.GetAxis("Mouse ScrollWheel") < 0)
         {
@@ -114,6 +118,11 @@ public class PlayerController : MonoBehaviour
         else
         {
             handHolder.GetComponent<SpriteRenderer>().sprite = null;
+        }
+
+        if (Input.GetKeyDown(KeyCode.T) && selectedItem != null)
+        {
+            inventory.Drop(selectedItem);
         }
 
         if (inventory.inventorySlots[selectedSlotIndex, inventory.inventoryHeight - 1] != null)
@@ -149,6 +158,14 @@ public class PlayerController : MonoBehaviour
                     }
                 }
             }
+            else if (openChest && terrainGenerator.GetTileClass(mousePos.x, mousePos.y).tileName == "Chest" && chestShowing == false)
+            {
+                chestShowing = true;
+            }
+            else if (openChest && terrainGenerator.GetTileClass(mousePos.x, mousePos.y).tileName == "Chest" && chestShowing == true)
+            {
+                chestShowing = false;
+            }
 
         }
 
@@ -161,6 +178,7 @@ public class PlayerController : MonoBehaviour
         mousePos.y = Mathf.RoundToInt(Camera.main.ScreenToWorldPoint(Input.mousePosition).y - 0.5f);
 
         inventory.inventoryUI.SetActive(inventoryShowing);
+        chest.chestUI.SetActive(chestShowing);
 
         anim.SetFloat("horizontal", horizontal);
         anim.SetBool("hit", hit || place);
