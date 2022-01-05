@@ -230,15 +230,19 @@ public class Inventory : MonoBehaviour
         {
             for (int x = 0; x < inventoryWidth; x++)
             {
-                if (inventorySlots[x, y].item.itemName == item.itemName)
+                if (inventorySlots[x, y].item != null)
                 {
-                    inventorySlots[x, y].quantity -= 1;
-                    if (inventorySlots[x, y].quantity == 0)
+                    if (inventorySlots[x, y].item.itemName == item.itemName)
                     {
-                        inventorySlots[x, y] = null;
+                        inventorySlots[x, y].quantity -= 1;
+                        if (inventorySlots[x, y].quantity == 0)
+                        {
+                            inventorySlots[x, y] = null;
+                        }
+
+                        UpdateInventoryUI();
+                        return true;
                     }
-                    UpdateInventoryUI();
-                    return true;
                 }
             }
         }

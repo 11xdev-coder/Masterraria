@@ -17,7 +17,8 @@ public class ItemClass
         sword,
         pickaxe,
         axe,
-        hammer
+        hammer,
+        unbreakable
     };
 
     public ItemType itemType;

@@ -412,8 +412,13 @@ public class TerrainGeneration : MonoBehaviour
                     // меняем спрайт на дерн
                     tileSprites = curBiome.tileAtlas.grass;
                 }
+
+                if (y == 0)
+                {
+                    tileSprites = tileAtlas.bedrock;
+                }
                 // надо ли генерировать пещеры?
-                if (generateCaves)
+                if (generateCaves && y > 0)
                 {
                     // если да то если цвет пикселя в caveNoiseTexture превышает 0.5 то
                     if (caveNoiseTexture.GetPixel(x, y).r > 0.5f)
@@ -562,12 +567,15 @@ public class TerrainGeneration : MonoBehaviour
         if (GetTileClass(x, y) && x >= 0 && x <= worldSize && y >= 0 && y <= worldSize)
         {
             TileClass tile = GetTileClass(x, y);
-            if (item.itemType == ItemClass.ItemType.tool)
+            if (item.itemType != null)
             {
-                if (tile.toolToBreak == item.toolType)
+                if (item.itemType == ItemClass.ItemType.tool)
                 {
-                    RemoveTile(x, y);
-                    return true;
+                    if (tile.toolToBreak == item.toolType)
+                    {
+                        RemoveTile(x, y);
+                        return true;
+                    }
                 }
             }
         }
@@ -642,7 +650,7 @@ public class TerrainGeneration : MonoBehaviour
                 {
                     if (!GetTileClass(x, y))
                     {
-                        RemoveLightSource(x, y);
+                        //RemoveLightSource(x, y);
                         PlaceTile(tile, x, y, isNaturallyPlaced);
                         return true;
                     }
@@ -650,7 +658,7 @@ public class TerrainGeneration : MonoBehaviour
                     {
                         if (!GetTileClass(x, y).inBackGround)
                         {
-                            RemoveLightSource(x, y);
+                            //RemoveLightSource(x, y);
                             PlaceTile(tile, x, y, isNaturallyPlaced);
                             return true;
                         }

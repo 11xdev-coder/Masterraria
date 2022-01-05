@@ -21,6 +21,7 @@ MonoBehaviour:
   sand: {fileID: 0}
   mud: {fileID: 0}
   cactus: {fileID: 0}
+  bedrock: {fileID: 11400000, guid: 0ca31fb3aa2bb554f90cdd5a31d77def, type: 2}
   copper: {fileID: 11400000, guid: 17cc6df01b7c86544baf4d548c0112d0, type: 2}
   coal: {fileID: 11400000, guid: 442ce9aa35ef3bf428e1235284f7e8a5, type: 2}
   iron: {fileID: 11400000, guid: 0ef53fb8942b6c946aac2cdc55c57b7c, type: 2}

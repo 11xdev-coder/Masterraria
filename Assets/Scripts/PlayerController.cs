@@ -5,12 +5,15 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public LayerMask layerMask;
+    
     public int selectedSlotIndex = 0;
     public GameObject hotbarSelector;
     public Inventory inventory;
     public bool inventoryShowing = false;
 
     public ItemClass selectedItem;
+    public GameObject handHolder;
 
     public float moveSpeed;
     public float jumpForce;
@@ -58,12 +61,20 @@ public class PlayerController : MonoBehaviour
         {
             transform.localScale = new Vector3(1, 1, 1);
         }
-
+        
+        // jumping
         if (jump > 0.1)
         {
             if(onGround)
                 movement.y = jumpForce;
         }
+        
+        // autojumping
+        // if (FootRayCast() && !HeadRayCast())
+        // {
+        //     if(onGround)
+        //         movement.y = jumpForce * 0.7f;
+        // }
 
         rb.velocity = movement;
     }
@@ -88,6 +99,22 @@ public class PlayerController : MonoBehaviour
         }
 
         hotbarSelector.transform.position = inventory.hotbarUISlots[selectedSlotIndex].transform.position;
+        if (selectedItem != null)
+        {
+            handHolder.GetComponent<SpriteRenderer>().sprite = selectedItem.sprite;
+            if (selectedItem.itemType == ItemClass.ItemType.block)
+            {
+                handHolder.transform.localScale = new Vector3(-0.5f, 0.5f, 0.5f);
+            }
+            else
+            {
+                handHolder.transform.localScale = new Vector3(-1, 1, 1);
+            }
+        }
+        else
+        {
+            handHolder.GetComponent<SpriteRenderer>().sprite = null;
+        }
 
         if (inventory.inventorySlots[selectedSlotIndex, inventory.inventoryHeight - 1] != null)
             selectedItem = inventory.inventorySlots[selectedSlotIndex, inventory.inventoryHeight - 1].item;
@@ -138,4 +165,22 @@ public class PlayerController : MonoBehaviour
         anim.SetFloat("horizontal", horizontal);
         anim.SetBool("hit", hit || place);
     }
+
+    // private void OnValidate()
+    // {
+    //     Debug.DrawRay(transform.position - (Vector3.up * 0.5f), -Vector2.right, Color.white, 10f);
+    //     Debug.DrawRay(transform.position + (Vector3.up * 0.5f), -Vector2.right, Color.white, 10f);
+    // }
+    //
+    // public bool FootRayCast()
+    // {
+    //     RaycastHit2D hit = Physics2D.Raycast(transform.position - (Vector3.up * 0.5f), -Vector2.right, 1f, 10);
+    //     return hit;
+    // }
+    //
+    // public bool HeadRayCast()
+    // {
+    //     RaycastHit2D hit = Physics2D.Raycast(transform.position + (Vector3.up * 0.5f), -Vector2.right, 1f, 10);
+    //     return hit;
+    // }
 }

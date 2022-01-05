@@ -20,4 +20,5 @@ MonoBehaviour:
   inBackGround: 1
   naturallyPlaced: 1
   tileDrop: {fileID: 0}
+  toolToBreak: 1
   isStackable: 1

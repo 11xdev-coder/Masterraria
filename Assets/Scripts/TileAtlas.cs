@@ -15,6 +15,7 @@ public class TileAtlas : ScriptableObject
     public TileClass sand;
     public TileClass mud;
     public TileClass cactus;
+    public TileClass bedrock;
 
     [Header("Ores")]
     public TileClass copper;
