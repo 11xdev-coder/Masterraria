@@ -757,6 +757,7 @@ public class TerrainGeneration : MonoBehaviour
                 newTile.AddComponent<BoxCollider2D>();
                 newTile.GetComponent<BoxCollider2D>().size = Vector2.one;
                 newTile.tag = "Ground";
+                
             }
             
             // меняем имя

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Net.Http.Headers;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -47,6 +48,11 @@ public class PlayerController : MonoBehaviour
     public void Spawn()
     {
         GetComponent<Transform>().position = spawnPos;
+    }
+
+    public void SaveQuit()
+    {
+        SceneManager.LoadScene("MainMenu");
     }
 
     private void FixedUpdate()

@@ -123,6 +123,34 @@ public class ChestUI : MonoBehaviour
         return null;
     }
     
+    public ItemClass ItemToLootEnd(int amount)
+    {
+        for (int y = chestHeight - 1; y >= 0; y--)
+        {
+            for (int x = chestWidth - 1; x >= 0; x--)
+            {
+                if (chestSlots[x, y] != null)
+                {
+                    ItemClass toLoot = chestSlots[x, y].item;
+                    if (chestSlots[x, y].quantity >= amount)
+                    {
+                        inventory.Add(chestSlots[x, y].item, amount);
+                        Loot(toLoot, amount);
+                        return toLoot;
+                    }
+                    else
+                    {
+                        inventory.Add(chestSlots[x, y].item, 1);
+                        Loot(toLoot, 1);
+                        return toLoot;
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+    
     public ItemClass ItemToPutStart(int amount)
     {
         for (int y = 0; y < inventory.inventoryHeight; y++)
@@ -150,6 +178,34 @@ public class ChestUI : MonoBehaviour
 
         return null;
     }
+    
+    public ItemClass ItemToLootStart(int amount)
+    {
+        for (int y = 0; y < chestHeight; y++)
+        {
+            for (int x = 0; x < chestWidth; x++)
+            {
+                if (chestSlots[x, y] != null)
+                {
+                    ItemClass toLoot = chestSlots[x, y].item;
+                    if (chestSlots[x, y].quantity >= amount)
+                    {
+                        inventory.Add(chestSlots[x, y].item, amount);
+                        Loot(toLoot, amount);
+                        return toLoot;
+                    }
+                    else
+                    {
+                        inventory.Add(chestSlots[x, y].item, 1);
+                        Loot(toLoot, 1);
+                        return toLoot;
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
 
     public void PutAll()
     {
@@ -166,7 +222,24 @@ public class ChestUI : MonoBehaviour
             }
         }
     }
-
+    
+    public void LootAll()
+    {
+        for (int y = 0; y < chestHeight; y++)
+        {
+            for (int x = 0; x < chestWidth; x++)
+            {
+                if (chestSlots[x, y] != null)
+                {
+                    ItemClass toLoot = chestSlots[x, y].item;
+                    inventory.Add(chestSlots[x, y].item, chestSlots[x, y].quantity);
+                    Loot(toLoot, chestSlots[x, y].quantity);
+                }
+            }
+        }
+    }
+    
+    #region putButtons
     public void PutEndPressed()
     {
         ItemToPutEnd(1);
@@ -196,6 +269,40 @@ public class ChestUI : MonoBehaviour
     {
         ItemToPutStart(100);
     }
+    #endregion
+    
+    #region lootButtons
+    public void LootEndPressed()
+    {
+        ItemToLootEnd(1);
+    }
+
+    public void LootStartPressed()
+    {
+        ItemToLootStart(1);
+    }
+    
+    public void LootEnd15Pressed()
+    {
+        ItemToLootEnd(15);;
+    }
+
+    public void LootStart15Pressed()
+    {
+        ItemToLootStart(15);
+    }
+    
+    public void LootEnd100Pressed()
+    {
+        ItemToLootEnd(100);;
+    }
+
+    public void LootStart100Pressed()
+    {
+        ItemToLootStart(100);
+    }
+    #endregion
+
     
     public bool Put(ItemClass item, int amount)
     {
@@ -267,30 +374,30 @@ public class ChestUI : MonoBehaviour
     // // }
     //
     //
-    // public bool RemoveFromChest(ItemClass item)
-    // {
-    //     for (int y = inventoryHeight - 1; y >= 0; y--)
-    //     {
-    //         for (int x = 0; x < inventoryWidth; x++)
-    //         {
-    //             if (chestSlots[x, y].item != null)
-    //             {
-    //                 if (chestSlots[x, y].item.itemName == item.itemName)
-    //                 {
-    //                     chestSlots[x, y].quantity -= 1;
-    //                     if (chestSlots[x, y].quantity == 0)
-    //                     {
-    //                         chestSlots[x, y] = null;
-    //                     }
-    //
-    //                     UpdateInventoryUI();
-    //                     return true;
-    //                 }
-    //             }
-    //         }
-    //     }
-    //
-    //     return false;
-    // }
+    public bool Loot(ItemClass item, int amount)
+    {
+        for (int y = chestHeight - 1; y >= 0; y--)
+        {
+            for (int x = 0; x < chestWidth; x++)
+            {
+                if (chestSlots[x, y] != null)
+                {
+                    if (chestSlots[x, y].item.itemName == item.itemName)
+                    {
+                        chestSlots[x, y].quantity -= amount;
+                        if (chestSlots[x, y].quantity == 0)
+                        {
+                            chestSlots[x, y] = null;
+                        }
+    
+                        UpdateInventoryUI();
+                        return true;
+                    }
+                }
+            }
+        }
+    
+        return false;
+    }
 }
 
