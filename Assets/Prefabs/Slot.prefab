@@ -75,8 +75,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4290690755
-  m_fontColor: {r: 0.764151, g: 0.7468494, b: 0.7468494, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -302,7 +302,6 @@ GameObject:
   - component: {fileID: 5297995922046893474}
   - component: {fileID: 378566925874621075}
   - component: {fileID: 5647615996375453158}
-  - component: {fileID: 3994655462390070918}
   m_Layer: 5
   m_Name: Info
   m_TagString: Untagged
@@ -413,18 +412,3 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!114 &3994655462390070918
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8519807427935582998}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c1c382e45970e0849a07279e0f015e99, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  drop: 0
-  inventory: {fileID: 0}
-  player: {fileID: 0}

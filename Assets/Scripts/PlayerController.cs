@@ -154,7 +154,7 @@ public class PlayerController : MonoBehaviour
                     if (selectedItem.itemType == ItemClass.ItemType.block)
                     {
                         if(terrainGenerator.CheckTile(selectedItem.tile, mousePos.x, mousePos.y, false))
-                            inventory.Remove(selectedItem);
+                            inventory.Remove(selectedItem, 1);
                     }
                 }
             }

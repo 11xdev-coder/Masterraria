@@ -51,10 +51,10 @@ public class Inventory : MonoBehaviour
 
         SetupUI();
         UpdateInventoryUI();
-        Add(new ItemClass(pickaxe));
-        Add(new ItemClass(axe));
-        Add(new ItemClass(hammer));
-        Add(new ItemClass(chest));
+        Add(new ItemClass(pickaxe), 1);
+        Add(new ItemClass(axe), 1);
+        Add(new ItemClass(hammer), 1);
+        Add(new ItemClass(chest), 1);
     }
     public void SetupUI()
     {
@@ -162,7 +162,7 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    public bool Add(ItemClass item)
+    public bool Add(ItemClass item, int amount)
     {
         Vector2Int itemPos = Contains(item);
         bool added = false;
@@ -170,8 +170,11 @@ public class Inventory : MonoBehaviour
         {
             //if (inventorySlots[itemPos.x, itemPos.y].quantity <= stackLimit)
             //{
-            inventorySlots[itemPos.x, itemPos.y].quantity += 1;
-            added = true;
+            if (inventorySlots[itemPos.x, itemPos.y].quantity >= amount)
+            {
+                inventorySlots[itemPos.x, itemPos.y].quantity += amount;
+                added = true;
+            }
             //}
         }
         if(!added)
@@ -185,7 +188,7 @@ public class Inventory : MonoBehaviour
                     if (inventorySlots[x, y] == null)
                     {
                         inventorySlots[x, y] = new InventorySlot
-                            (item, new Vector2Int(x, y), 1);
+                            (item, new Vector2Int(x, y), amount);
                         added = true;
                         break;
                     }
@@ -238,11 +241,11 @@ public class Inventory : MonoBehaviour
             item.sprite;
         tileDropItem = item;
         newTileDrop.GetComponent<TileDropController>().item = tileDropItem;
-        Remove(item);
+        Remove(item, 1);
     }
     
 
-    public bool Remove(ItemClass item)
+    public bool Remove(ItemClass item, int amount)
     {
         for (int y = inventoryHeight - 1; y >= 0; y--)
         {
@@ -252,8 +255,8 @@ public class Inventory : MonoBehaviour
                 {
                     if (inventorySlots[x, y].item.itemName == item.itemName)
                     {
-                        inventorySlots[x, y].quantity -= 1;
-                        if (inventorySlots[x, y].quantity == 0)
+                        inventorySlots[x, y].quantity -= amount;
+                        if (inventorySlots[x, y].quantity <= 0)
                         {
                             inventorySlots[x, y] = null;
                         }
@@ -261,10 +264,12 @@ public class Inventory : MonoBehaviour
                         UpdateInventoryUI();
                         return true;
                     }
+                    
                 }
             }
         }
-
         return false;
     }
+
 }
+

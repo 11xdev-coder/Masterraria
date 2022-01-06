@@ -95,7 +95,7 @@ public class ChestUI : MonoBehaviour
         }
     }
 
-    public ItemClass ItemToPutEnd()
+    public ItemClass ItemToPutEnd(int amount)
     {
         for (int y = inventory.inventoryHeight - 1; y >= 0; y--)
         {
@@ -103,9 +103,19 @@ public class ChestUI : MonoBehaviour
             {
                 if (inventory.inventorySlots[x, y] != null)
                 {
-                    ItemClass toReturn = inventory.inventorySlots[x, y].item;
-                    inventory.Remove(inventory.inventorySlots[x, y].item);
-                    return toReturn;
+                    ItemClass toPut = inventory.inventorySlots[x, y].item;
+                    if (inventory.inventorySlots[x, y].quantity >= amount)
+                    {
+                        inventory.Remove(inventory.inventorySlots[x, y].item, amount);
+                        Put(toPut, amount);
+                        return toPut;
+                    }
+                    else
+                    {
+                        inventory.Remove(inventory.inventorySlots[x, y].item, 1);
+                        Put(toPut, 1);
+                        return toPut;
+                    }
                 }
             }
         }
@@ -113,7 +123,7 @@ public class ChestUI : MonoBehaviour
         return null;
     }
     
-    public ItemClass ItemToPutStart()
+    public ItemClass ItemToPutStart(int amount)
     {
         for (int y = 0; y < inventory.inventoryHeight; y++)
         {
@@ -121,9 +131,19 @@ public class ChestUI : MonoBehaviour
             {
                 if (inventory.inventorySlots[x, y] != null)
                 {
-                    ItemClass toReturn = inventory.inventorySlots[x, y].item;
-                    inventory.Remove(inventory.inventorySlots[x, y].item);
-                    return toReturn;
+                    ItemClass toPut = inventory.inventorySlots[x, y].item;
+                    if (inventory.inventorySlots[x, y].quantity >= amount)
+                    {
+                        inventory.Remove(inventory.inventorySlots[x, y].item, amount);
+                        Put(toPut, amount);
+                        return toPut;
+                    }
+                    else
+                    {
+                        inventory.Remove(inventory.inventorySlots[x, y].item, 1);
+                        Put(toPut, 1);
+                        return toPut;
+                    }
                 }
             }
         }
@@ -131,17 +151,53 @@ public class ChestUI : MonoBehaviour
         return null;
     }
 
+    public void PutAll()
+    {
+        for (int y = 0; y < inventory.inventoryHeight; y++)
+        {
+            for (int x = 0; x < inventory.inventoryWidth; x++)
+            {
+                if (inventory.inventorySlots[x, y] != null)
+                {
+                    ItemClass toPut = inventory.inventorySlots[x, y].item;
+                    Put(toPut, inventory.inventorySlots[x, y].quantity);
+                    inventory.Remove(inventory.inventorySlots[x, y].item, inventory.inventorySlots[x, y].quantity);
+                }
+            }
+        }
+    }
+
     public void PutEndPressed()
     {
-        Put(ItemToPutEnd());
+        ItemToPutEnd(1);
     }
 
     public void PutStartPressed()
     {
-        Put(ItemToPutStart());
+        ItemToPutStart(1);
     }
     
-    public bool Put(ItemClass item)
+    public void PutEnd15Pressed()
+    {
+        ItemToPutEnd(15);;
+    }
+
+    public void PutStart15Pressed()
+    {
+        ItemToPutStart(15);
+    }
+    
+    public void PutEnd100Pressed()
+    {
+        ItemToPutEnd(100);;
+    }
+
+    public void PutStart100Pressed()
+    {
+        ItemToPutStart(100);
+    }
+    
+    public bool Put(ItemClass item, int amount)
     {
         Vector2Int itemPos = Contains(item);
         bool added = false;
@@ -149,7 +205,7 @@ public class ChestUI : MonoBehaviour
         {
             //if (inventorySlots[itemPos.x, itemPos.y].quantity <= stackLimit)
             //{
-            chestSlots[itemPos.x, itemPos.y].quantity += 1;
+            chestSlots[itemPos.x, itemPos.y].quantity += amount;
             added = true;
             //}
         }
@@ -164,7 +220,7 @@ public class ChestUI : MonoBehaviour
                     if (chestSlots[x, y] == null)
                     {
                         chestSlots[x, y] = new InventorySlot
-                            (item, new Vector2Int(x, y), 1);
+                            (item, new Vector2Int(x, y), amount);
                         added = true;
                         break;
                     }
