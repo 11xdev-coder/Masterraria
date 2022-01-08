@@ -4,6 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+[System.Serializable]
 public class InventorySlot
 {
     public Vector2Int position;

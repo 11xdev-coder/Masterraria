@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-[System.Serializable]
 public class ItemClass
 {
     public enum ItemType
@@ -30,6 +29,7 @@ public class ItemClass
     public string itemName;
     public Sprite sprite;
     public bool isStackable;
+    public int amount;
 
 
     public ItemClass(TileClass _tile)

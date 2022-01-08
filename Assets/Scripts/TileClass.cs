@@ -25,13 +25,13 @@ public class TileClass : ScriptableObject
 
     public void Init(TileClass tile, bool isNaturallyPlaced)
     {
-        var thisTile = ScriptableObject.CreateInstance<TileClass>();
         tileName = tile.tileName;
         wallVariant = tile.wallVariant;
         tileSprites = tile.tileSprites;
-        inBackGround = tile.inBackGround;
-        naturallyPlaced = isNaturallyPlaced;
-        toolToBreak = tile.toolToBreak;
         tileDrop = tile.tileDrop;
+        inBackGround = tile.inBackGround;
+        toolToBreak = tile.toolToBreak;
+        isStackable = tile.isStackable;
+        naturallyPlaced = isNaturallyPlaced;
     }
 }

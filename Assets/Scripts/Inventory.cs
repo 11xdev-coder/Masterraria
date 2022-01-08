@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Http.Headers;
 using TMPro;
 using UnityEditor;
@@ -17,6 +18,8 @@ public class Inventory : MonoBehaviour
     public TileClass chest;
     public GameObject dropPrefab;
     public GameObject drop;
+    public string assetsDataPath;
+    public string directory;
 
     [Header("UI settings")]
     public Vector2 inventoryOffset;
@@ -44,6 +47,9 @@ public class Inventory : MonoBehaviour
 
     private void Start()
     {
+        assetsDataPath = Application.dataPath;
+        directory = assetsDataPath + "/saves/world1/inventory.txt";
+        
         inventorySlots = new InventorySlot[inventoryWidth, inventoryHeight];
         uiSlots = new GameObject[inventoryWidth, inventoryHeight];
         hotbarSlots = new InventorySlot[inventoryWidth];
@@ -56,6 +62,7 @@ public class Inventory : MonoBehaviour
         Add(new ItemClass(hammer), 1);
         Add(new ItemClass(chest), 1);
     }
+    
     public void SetupUI()
     {
         // setup inventory
