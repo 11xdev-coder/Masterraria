@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c62bd6ad28b59d4880ab9b06be061a2, type: 3}
   m_Name: TallGrassDesert
   m_EditorClassIdentifier: 
-  tileName: 
+  tileName: TallGrassDesert
   wallVariant: {fileID: 0}
   tileSprites:
   - {fileID: 21300000, guid: 214f2bd3d1f82d443a0cf77bc883c98e, type: 3}
@@ -22,3 +22,5 @@ MonoBehaviour:
   tileDrop: {fileID: 0}
   toolToBreak: 1
   isStackable: 1
+  hitsToBreak: 1
+  alreadyHitted: 0

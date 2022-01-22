@@ -22,3 +22,5 @@ MonoBehaviour:
   tileDrop: {fileID: 11400000}
   toolToBreak: 1
   isStackable: 1
+  hitsToBreak: 2
+  alreadyHitted: 0

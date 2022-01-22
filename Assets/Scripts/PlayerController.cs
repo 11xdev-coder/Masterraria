@@ -147,7 +147,13 @@ public class PlayerController : MonoBehaviour
         if (Vector2.Distance(transform.position, mousePos) <= reachDistance /*&&
             Vector2.Distance(transform.position, mousePos) > 1f*/)
         {
-            if (hit)
+            if (hit && terrainGenerator.GetTileClass(mousePos.x, mousePos.y).alreadyHitted < terrainGenerator.GetTileClass(mousePos.x, mousePos.y).hitsToBreak && selectedItem.toolType == terrainGenerator.GetTileClass(mousePos.x, mousePos.y).toolToBreak)
+            {
+                //terrainGenerator.RemoveTile(mousePos.x, mousePos.y);
+                terrainGenerator.GetTileClass(mousePos.x, mousePos.y).alreadyHitted += 1;
+            }
+
+            else if (hit && terrainGenerator.GetTileClass(mousePos.x, mousePos.y).alreadyHitted >= terrainGenerator.GetTileClass(mousePos.x, mousePos.y).hitsToBreak)
             {
                 //terrainGenerator.RemoveTile(mousePos.x, mousePos.y);
                 terrainGenerator.BreakTile(mousePos.x, mousePos.y, selectedItem);

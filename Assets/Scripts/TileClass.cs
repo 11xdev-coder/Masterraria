@@ -15,6 +15,8 @@ public class TileClass : ScriptableObject
     public TileClass tileDrop;
     public ItemClass.ToolType toolToBreak;
     public bool isStackable;
+    public int hitsToBreak;
+    public int alreadyHitted;
 
     public static TileClass CreateInstance(TileClass tile, bool isNaturallyPlaced)
     {
@@ -33,5 +35,7 @@ public class TileClass : ScriptableObject
         toolToBreak = tile.toolToBreak;
         isStackable = tile.isStackable;
         naturallyPlaced = isNaturallyPlaced;
+        hitsToBreak = tile.hitsToBreak;
+        alreadyHitted = tile.alreadyHitted;
     }
 }

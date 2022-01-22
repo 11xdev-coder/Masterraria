@@ -1,13 +1,12 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Net.Http.Headers;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
 
+[Serializable]
 public class Inventory : MonoBehaviour
 {
     [Header("Item Settings")]
@@ -168,6 +167,35 @@ public class Inventory : MonoBehaviour
             }
         }
     }
+
+    //public void SaveInvetory(string directory)
+    //{
+    //    StreamWriter sw = File.AppendText(directory);
+
+    //    for (int x = 0; x < inventoryWidth; x++)
+    //    {
+    //        for (int y = 0; y < inventoryHeight; y++)
+    //        {
+    //            sw.WriteLine(inventorySlots[x, y].quantity);
+    //            sw.WriteLine(inventorySlots[x, y].item.tool);
+    //            sw.WriteLine(inventorySlots[x, y].item.tile);
+    //        }
+    //    }
+    //}
+
+    //public void LoadInventory(string directory)
+    //{
+    //    StreamReader sr = File.OpenText(directory);
+
+    //    for (int x = 0; x < inventoryWidth; x++)
+    //    {
+    //        for (int y = 0; y < inventoryHeight; y++)
+    //        {
+    //            int _quantity = Int32.Parse(sr.ReadLine());
+    //            ToolClass _tool = sr.ReadLine();
+    //        }
+    //    }
+    //}
 
     public bool Add(ItemClass item, int amount)
     {
