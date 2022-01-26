@@ -10,7 +10,7 @@ public class TileDropController : MonoBehaviour
     {
         if (col.gameObject.CompareTag("Player"))
         {
-            if(col.GetComponent<Inventory>().Add(item, 1))
+            if (col.GetComponent<Inventory>().Add(item, 1))
                 Destroy(this.gameObject);
         }
     }

@@ -31,7 +31,6 @@ public class ItemClass
     public bool isStackable;
     public int amount;
 
-
     public ItemClass(TileClass _tile)
     {
         itemName = _tile.tileName;
