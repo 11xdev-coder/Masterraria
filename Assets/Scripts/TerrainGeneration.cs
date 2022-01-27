@@ -80,6 +80,11 @@ public class TerrainGeneration : MonoBehaviour
     private BiomeClass curBiome;
     private Color[] biomeCols;
 
+    [Header("Mobs")]
+    public GameObject blueSlime;
+    public GameObject purpleSlime;
+    public GameObject greenSlime;
+
 
     // CreateChunks() - создает чанки
     // DrawCavesAndOres() - рисуеты белый шум для пещер и руд
@@ -90,6 +95,16 @@ public class TerrainGeneration : MonoBehaviour
     // GenerateNoiseTextures() - генерирует белый шум
     // GenerateTree() - генерирует дерево
     // PlaceTile() - ставит блок
+
+    public void SpawnSlime()
+    {
+        if(Random.Range(0, 2) == 0)
+            Instantiate(blueSlime, new Vector2(Random.Range(50, 150), Random.Range(135, 150)), Quaternion.identity);
+        else if (Random.Range(0, 2) == 1)
+            Instantiate(purpleSlime, new Vector2(Random.Range(50, 150), Random.Range(135, 150)), Quaternion.identity);
+        else if (Random.Range(0, 2) == 1)
+            Instantiate(greenSlime, new Vector2(Random.Range(50, 150), Random.Range(135, 150)), Quaternion.identity);
+    }
 
     private void OnValidate()
     {
@@ -160,6 +175,7 @@ public class TerrainGeneration : MonoBehaviour
         camera.Spawn(new Vector3(player.spawnPos.x, player.spawnPos.y, camera.transform.position.z));
         camera.worldSize = worldSize;
         player.Spawn();
+        InvokeRepeating("SpawnSlime", 15f, 15f);
     }
 
     private void Update()

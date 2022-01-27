@@ -3,7 +3,18 @@ guid: 19710bed50b2bbe40b0acb23af3599ce
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - worldTilesMap: {instanceID: 0}
+  - lightShader: {instanceID: 0}
+  - player: {instanceID: 0}
+  - camera: {instanceID: 0}
+  - tileDrop: {instanceID: 0}
+  - tileAtlas: {instanceID: 0}
+  - biomeMap: {instanceID: 0}
+  - caveNoiseTexture: {instanceID: 0}
+  - blueSlime: {fileID: 3662421070911703638, guid: e6cd82c9c14f9aa49a225d968a2b2ba7, type: 3}
+  - purpleSlime: {fileID: 2399599127416270062, guid: 2dd2d87b7816f284bb266a77674e346e, type: 3}
+  - greenSlime: {fileID: 2134269381224956290, guid: edadf873b3e24214193c8a9232820508, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
