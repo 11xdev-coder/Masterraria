@@ -12,6 +12,7 @@ public class SlimeAI : MonoBehaviour
     public float speed;
     public ParticleSystem landParticle;
     public bool isPeaceful;
+    public bool onGround = true;
 
     public Rigidbody2D rb;
 
@@ -69,29 +70,9 @@ public class SlimeAI : MonoBehaviour
         squashedSlime.GetComponent<SpriteRenderer>().enabled = sqashedSlimeBool;
     }
 
-    public IEnumerator Jump()
+    public IEnumerator OnCollisionEnter2D(Collision2D collision)
     {
-        print("Jumping");
-        //startSlime.transform.localScale = Vector3.one * -1;
-        ChangeSprites(true, false, false);
-
-        yield return new WaitForSeconds(1f);
-
-        ChangeSprites(false, true, false);
-
-        yield return new WaitForSeconds(0.5f);
-
-        ChangeSprites(true, false, false);
-
-        Vector2 movement = new Vector2(0, rb.velocity.y);
-
-        movement.y = jumpForce;
-        movement.x = GetMovingSide() * speed;
-
-        rb.velocity = movement;
-
-        yield return new WaitForSeconds(jumpForce / 5);
-
+        print("oof");
         ChangeSprites(false, false, true);
         //landParticle = Instantiate(landParticle, transform.position, new Quaternion(-90, 0, 0, 0));
         landParticle.emissionRate = 15;
@@ -104,5 +85,45 @@ public class SlimeAI : MonoBehaviour
 
         ChangeSprites(true, false, false);
         landParticle.emissionRate = 0;
+        onGround = true;
+    }
+
+    public IEnumerator Jump()
+    {
+        if (onGround)
+        {
+            print("Jumping");
+            //startSlime.transform.localScale = Vector3.one * -1;
+            ChangeSprites(true, false, false);
+
+            yield return new WaitForSeconds(1f);
+
+            ChangeSprites(false, true, false);
+
+            yield return new WaitForSeconds(0.5f);
+
+            ChangeSprites(true, false, false);
+
+            Vector2 movement = new Vector2(0, rb.velocity.y);
+
+            movement.y = jumpForce;
+            movement.x = GetMovingSide() * speed;
+
+            rb.velocity = movement;
+            onGround = false;
+        }
+
+        //ChangeSprites(false, false, true);
+        ////landParticle = Instantiate(landParticle, transform.position, new Quaternion(-90, 0, 0, 0));
+        //landParticle.emissionRate = 15;
+
+        //yield return new WaitForSeconds(0.3f);
+
+        //ChangeSprites(false, true, false);
+
+        //yield return new WaitForSeconds(0.3f);
+
+        //ChangeSprites(true, false, false);
+        //landParticle.emissionRate = 0;
     }
 }
